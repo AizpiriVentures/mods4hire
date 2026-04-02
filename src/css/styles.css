@@ -1,0 +1,15 @@
+/* Mods4Hire — global styles. Tailwind loaded via CDN. */
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f8fafc; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+.spinner { border: 3px solid #e2e8f0; border-top-color: #0ea5e9; border-radius: 50%; width: 24px; height: 24px; animation: spin 0.7s linear infinite; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; padding: 0.75rem 1.25rem; border-radius: 0.5rem; font-size: 0.875rem; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+.toast-success { background: #10b981; color: #fff; }
+.toast-error   { background: #ef4444; color: #fff; }
+
+.listing-card { transition: box-shadow 0.2s, border-color 0.2s; }
+.listing-card:hover { box-shadow: 0 4px 20px rgba(14,165,233,0.12); border-color: #0ea5e9; }

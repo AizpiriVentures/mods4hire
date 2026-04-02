@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moderator Profile — Mods4Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-sky-600">Mods4Hire</a>
+      <div id="auth-links" class="flex items-center gap-4"></div>
+    </div>
+  </nav>
+  <main class="max-w-2xl mx-auto px-4 py-10">
+    <div id="mod-profile"><p class="text-gray-400">Loading…</p></div>
+    <h2 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Ratings</h2>
+    <div id="ratings-list"></div>
+  </main>
+  <script type="module">
+    import { updateNavAuth } from '/src/js/auth.js';
+    import { supabase, escapeHtml } from '/src/js/supabase.js';
+    import { getRatingsForUser } from '/src/js/ratings.js';
+
+    updateNavAuth();
+    const id = new URLSearchParams(location.search).get('id');
+    if (!id) window.location.href = '/moderators.html';
+
+    const { data: profile } = await supabase.from('profiles').select('*, moderator_profiles(*)').eq('id', id).single();
+    document.getElementById('mod-profile').innerHTML = `
+      <h1 class="text-2xl font-bold text-gray-900">${escapeHtml(profile.username)}</h1>
+      <p class="text-yellow-500">⭐ ${profile.rating_avg} <span class="text-gray-400 text-sm">(${profile.rating_count} ratings)</span></p>
+      ${profile.bio ? `<p class="mt-3 text-gray-600">${escapeHtml(profile.bio)}</p>` : ''}
+      <div class="mt-4 bg-white rounded-xl border border-gray-200 p-5 space-y-2 text-sm">
+        ${profile.moderator_profiles?.hours_per_week ? `<p><span class="text-gray-400">Availability:</span> ${profile.moderator_profiles.hours_per_week} hrs/week</p>` : ''}
+        ${(profile.moderator_profiles?.platforms||[]).length ? `<p><span class="text-gray-400">Platforms:</span> ${(profile.moderator_profiles.platforms||[]).map(p=>escapeHtml(p)).join(', ')}</p>` : ''}
+        ${profile.moderator_profiles?.portfolio_url ? `<p><a href="${escapeHtml(profile.moderator_profiles.portfolio_url)}" target="_blank" rel="noopener" class="text-sky-600 hover:underline">View Portfolio</a></p>` : ''}
+      </div>
+    `;
+
+    const ratings = await getRatingsForUser(id);
+    const rEl = document.getElementById('ratings-list');
+    if (!ratings.length) { rEl.innerHTML = '<p class="text-gray-400 text-sm">No ratings yet.</p>'; }
+    else ratings.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'bg-white border border-gray-200 rounded-xl p-4 mb-3';
+      div.innerHTML = `<div class="flex justify-between text-sm mb-2"><span class="font-medium">${escapeHtml(r.rater?.username||'?')}</span><span class="text-gray-400">${new Date(r.created_at).toLocaleDateString()}</span></div>
+        <div class="text-xs text-gray-400 grid grid-cols-2 gap-1">
+          <span>Reliability: ${'★'.repeat(r.reliability||0)}</span><span>Communication: ${'★'.repeat(r.communication||0)}</span>
+          <span>Judgment: ${'★'.repeat(r.judgment||0)}</span><span>Professionalism: ${'★'.repeat(r.professionalism||0)}</span>
+        </div>
+        ${r.comment ? `<p class="mt-2 text-sm text-gray-600">${escapeHtml(r.comment)}</p>` : ''}`;
+      rEl.appendChild(div);
+    });
+  </script>
+</body>
+</html>

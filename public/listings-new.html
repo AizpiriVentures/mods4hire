@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post a Job — Mods4Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-sky-600">Mods4Hire</a>
+      <div id="auth-links" class="flex items-center gap-4"></div>
+    </div>
+  </nav>
+  <main class="max-w-2xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-8">Post a Mod Job</h1>
+    <form id="new-listing-form" class="space-y-5">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Job Title *</label>
+        <input name="title" type="text" required maxlength="120" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Platforms</label>
+        <div class="flex flex-wrap gap-3">
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Discord" class="rounded" /> Discord</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="TeamSpeak" class="rounded" /> TeamSpeak</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Reddit" class="rounded" /> Reddit</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Forum" class="rounded" /> Forum</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Twitch" class="rounded" /> Twitch</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Other" class="rounded" /> Other</label>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Compensation *</label>
+          <select name="compensation_type" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
+            <option value="paid_hourly">Paid (Hourly)</option>
+            <option value="monthly_retainer">Monthly Retainer</option>
+            <option value="volunteer">Volunteer</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Hours/week</label>
+          <input name="hours_per_week" type="number" min="1" max="168" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Required Skills</label>
+        <textarea name="required_skills" rows="2" maxlength="500" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Application Deadline</label>
+        <input name="deadline" type="date" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+      </div>
+      <p id="form-error" class="text-red-500 text-sm hidden"></p>
+      <button type="submit" id="submit-btn" class="w-full bg-sky-600 text-white py-3 rounded-lg font-medium hover:bg-sky-700 transition">Post Job</button>
+    </form>
+  </main>
+  <script type="module">
+    import { requireAuth, updateNavAuth } from '/src/js/auth.js';
+    import { createListing } from '/src/js/listings.js';
+    import { showToast, setLoading } from '/src/js/supabase.js';
+
+    updateNavAuth();
+    const user = await requireAuth();
+
+    document.getElementById('new-listing-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const err = document.getElementById('form-error');
+      err.classList.add('hidden');
+      const fd = new FormData(e.target);
+      setLoading(btn, true);
+      try {
+        const listing = await createListing({
+          hirer_id: user.id,
+          title: fd.get('title'),
+          platform: fd.getAll('platform'),
+          compensation_type: fd.get('compensation_type'),
+          hours_per_week: fd.get('hours_per_week') ? parseInt(fd.get('hours_per_week')) : null,
+          required_skills: fd.get('required_skills') || null,
+          deadline: fd.get('deadline') || null,
+        });
+        showToast('Job posted!');
+        window.location.href = `/listing.html?id=${listing.id}`;
+      } catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); }
+      finally { setLoading(btn, false); }
+    });
+  </script>
+</body>
+</html>

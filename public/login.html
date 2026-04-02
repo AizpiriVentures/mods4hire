@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In — Mods4Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+  <div class="bg-white w-full max-w-md rounded-xl shadow-sm border border-gray-200 p-8">
+    <a href="/" class="text-sky-600 font-bold text-xl block mb-6">Mods4Hire</a>
+    <div class="flex mb-6 bg-gray-100 rounded-lg p-1">
+      <button id="tab-login" class="flex-1 text-sm py-1.5 rounded-md bg-white shadow text-gray-900 font-medium">Log In</button>
+      <button id="tab-register" class="flex-1 text-sm py-1.5 rounded-md text-gray-500">Sign Up</button>
+    </div>
+    <form id="login-form" class="space-y-4">
+      <input id="login-email" type="email" placeholder="Email" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      <input id="login-password" type="password" placeholder="Password" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      <p id="login-error" class="text-red-500 text-sm hidden"></p>
+      <button type="submit" id="login-btn" class="w-full bg-sky-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-sky-700 transition">Log In</button>
+    </form>
+    <form id="register-form" class="space-y-4 hidden">
+      <input id="reg-username" type="text" placeholder="Username" required minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+      <input id="reg-email" type="email" placeholder="Email" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+      <input id="reg-password" type="password" placeholder="Password (8+ chars)" required minlength="8" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+      <select id="reg-role" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
+        <option value="both">Hirer & Moderator</option>
+        <option value="hirer">I hire moderators</option>
+        <option value="moderator">I am a moderator</option>
+      </select>
+      <p id="reg-error" class="text-red-500 text-sm hidden"></p>
+      <button type="submit" id="reg-btn" class="w-full bg-sky-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-sky-700 transition">Create Account</button>
+    </form>
+  </div>
+  <script type="module">
+    import { signIn, signUp } from '/src/js/auth.js';
+    import { setLoading } from '/src/js/supabase.js';
+
+    const tabLogin = document.getElementById('tab-login');
+    const tabReg = document.getElementById('tab-register');
+    tabLogin.addEventListener('click', () => { document.getElementById('login-form').classList.remove('hidden'); document.getElementById('register-form').classList.add('hidden'); });
+    tabReg.addEventListener('click', () => { document.getElementById('register-form').classList.remove('hidden'); document.getElementById('login-form').classList.add('hidden'); });
+    if (location.hash === '#register') tabReg.click();
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      const err = document.getElementById('login-error');
+      err.classList.add('hidden'); setLoading(btn, true);
+      try { await signIn(document.getElementById('login-email').value, document.getElementById('login-password').value); window.location.href = '/dashboard.html'; }
+      catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); }
+      finally { setLoading(btn, false); }
+    });
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('reg-btn');
+      const err = document.getElementById('reg-error');
+      err.classList.add('hidden'); setLoading(btn, true);
+      try { await signUp(document.getElementById('reg-email').value, document.getElementById('reg-password').value, document.getElementById('reg-username').value, document.getElementById('reg-role').value); window.location.href = '/dashboard.html'; }
+      catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); }
+      finally { setLoading(btn, false); }
+    });
+  </script>
+</body>
+</html>
