@@ -1,5 +1,9 @@
 /* Mods4Hire — global styles. Tailwind loaded via CDN. */
 
+/* Page fade-in */
+body { animation: pageFade 0.35s ease both; }
+@keyframes pageFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f8fafc; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }

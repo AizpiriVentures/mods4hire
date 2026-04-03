@@ -218,43 +218,46 @@
     </div>
   </section>
 
-  <!-- ── Contact ───────────────────────────────────────────────────────── -->
-  <section class="bg-gray-50 border-t border-gray-100 py-16">
-    <div class="max-w-xl mx-auto px-4">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">Contact Us</h2>
-      <p class="text-gray-500 text-sm mb-7 leading-relaxed">
-        Have a question, a partnership idea, or feedback about Mods4Hire? Use the form below and we'll get back to you directly. This is not for job applications — to apply for a listing, browse and apply through the listing page.
-      </p>
+  <!-- ── Contact Modal ─────────────────────────────────────────────────── -->
+  <div id="contact-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div id="contact-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    <!-- Panel -->
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-auto p-6 sm:p-8">
+      <button id="close-contact" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <h2 class="text-xl font-bold text-gray-900 mb-1">Contact Us</h2>
+      <p class="text-gray-500 text-sm mb-5 leading-relaxed">Questions, partnerships, or feedback? We'll get back to you directly. For job applications, apply through the listing page.</p>
       <form id="contact-form" class="space-y-4">
         <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY" />
         <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
-            <input name="name" type="text" required maxlength="80" placeholder="Jane Smith" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+            <input name="name" type="text" required maxlength="80" placeholder="Jane Smith" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Your Email</label>
-            <input name="email" type="email" required placeholder="you@example.com" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+            <input name="email" type="email" required placeholder="you@example.com" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
           </div>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-          <input name="subject_line" type="text" required maxlength="120" placeholder="What's this about?" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+          <input name="subject_line" type="text" required maxlength="120" placeholder="What's this about?" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
         </div>
         <div>
           <div class="flex justify-between mb-1">
             <label class="block text-sm font-medium text-gray-700">Message</label>
             <span id="msg-count" class="text-xs text-gray-400">0 / 2000</span>
           </div>
-          <textarea id="contact-message" name="message" rows="5" required maxlength="2000" placeholder="Tell us what's on your mind…" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+          <textarea id="contact-message" name="message" rows="4" required maxlength="2000" placeholder="Tell us what's on your mind…" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
         </div>
         <p id="contact-error" class="text-red-500 text-sm hidden"></p>
         <button type="submit" id="contact-btn" class="w-full bg-sky-600 hover:bg-sky-700 disabled:opacity-60 disabled:cursor-not-allowed text-white py-2.5 rounded-lg font-medium transition-colors text-sm">Send Message</button>
       </form>
-
-      <!-- Success state (hidden until sent) -->
-      <div id="contact-success" class="hidden text-center py-8">
+      <!-- Success state -->
+      <div id="contact-success" class="hidden text-center py-6">
         <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
           <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
         </div>
@@ -263,7 +266,7 @@
         <button id="contact-again" class="text-sky-600 hover:underline text-sm">Send another message</button>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- ── Footer ─────────────────────────────────────────────────────────── -->
   <footer class="bg-white border-t border-gray-100 py-8">
@@ -274,6 +277,7 @@
         <a href="/moderators.html" class="hover:text-gray-600 transition-colors">Moderators</a>
         <a href="/listings-new.html" class="hover:text-gray-600 transition-colors">Create a Listing</a>
         <a href="/platforms.html" class="hover:text-gray-600 transition-colors">Platforms</a>
+        <button id="open-contact" class="hover:text-gray-600 transition-colors">Contact Us</button>
         <a href="/login.html" class="hover:text-gray-600 transition-colors">Sign In</a>
       </div>
       <p class="text-xs text-gray-400">© 2026 Mods4Hire. All rights reserved.</p>
@@ -290,14 +294,23 @@
 
     updateNavAuth();
 
-    // Contact form — character counter
-    const msgArea = document.getElementById('contact-message');
-    const msgCount = document.getElementById('msg-count');
-    msgArea.addEventListener('input', () => { msgCount.textContent = `${msgArea.value.length} / 2000`; });
-
-    // Contact form — submission
+    // Contact modal
+    const modal = document.getElementById('contact-modal');
     const contactForm = document.getElementById('contact-form');
     const contactSuccess = document.getElementById('contact-success');
+    const msgArea = document.getElementById('contact-message');
+    const msgCount = document.getElementById('msg-count');
+
+    function openModal() { modal.classList.remove('hidden'); modal.classList.add('flex'); document.body.style.overflow = 'hidden'; }
+    function closeModal() { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }
+
+    document.getElementById('open-contact').addEventListener('click', openModal);
+    document.getElementById('close-contact').addEventListener('click', closeModal);
+    document.getElementById('contact-backdrop').addEventListener('click', closeModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    msgArea.addEventListener('input', () => { msgCount.textContent = `${msgArea.value.length} / 2000`; });
+
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('contact-btn');
@@ -309,27 +322,15 @@
       try {
         const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
         const json = await res.json();
-        if (json.success) {
-          contactForm.classList.add('hidden');
-          contactSuccess.classList.remove('hidden');
-        } else {
-          err.textContent = json.message || 'Something went wrong. Please try again.';
-          err.classList.remove('hidden');
-        }
-      } catch {
-        err.textContent = 'Network error. Please try again.';
-        err.classList.remove('hidden');
-      } finally {
-        btn.disabled = false; btn.textContent = 'Send Message';
-      }
+        if (json.success) { contactForm.classList.add('hidden'); contactSuccess.classList.remove('hidden'); }
+        else { err.textContent = json.message || 'Something went wrong.'; err.classList.remove('hidden'); }
+      } catch { err.textContent = 'Network error. Please try again.'; err.classList.remove('hidden'); }
+      finally { btn.disabled = false; btn.textContent = 'Send Message'; }
     });
 
-    // "Send another message" resets the form
     document.getElementById('contact-again').addEventListener('click', () => {
-      contactForm.reset();
-      msgCount.textContent = '0 / 2000';
-      contactSuccess.classList.add('hidden');
-      contactForm.classList.remove('hidden');
+      contactForm.reset(); msgCount.textContent = '0 / 2000';
+      contactSuccess.classList.add('hidden'); contactForm.classList.remove('hidden');
     });
 
     getListings({ pageSize: 6 }).then(listings => {
