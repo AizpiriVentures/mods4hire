@@ -49,7 +49,7 @@ export async function updateNavAuth() {
       <button id="sign-out-btn" class="text-sm text-red-500 hover:text-red-700">Sign Out</button>`;
     document.getElementById('sign-out-btn')?.addEventListener('click', signOut);
   } else {
-    el.innerHTML = `<a href="/login.html" class="text-sm text-gray-600 hover:text-sky-600">Log In</a>
-      <a href="/login.html#register" class="text-sm bg-sky-600 text-white px-3 py-1 rounded-lg hover:bg-sky-700">Sign Up</a>`;
+    el.innerHTML = `<a href="/login.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Log In</a>
+      <a href="/login.html#register" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Sign Up</a>`;
   }
 }
