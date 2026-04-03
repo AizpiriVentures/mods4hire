@@ -163,9 +163,11 @@
     </div>
   </footer>
 
+  <script>
+    document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+  </script>
   <script type="module">
     import { updateNavAuth } from '/src/js/auth.js';
-    document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
     updateNavAuth();
   </script>
 </body>

@@ -33,6 +33,11 @@
       <button type="submit" id="reg-btn" class="w-full bg-sky-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-sky-700 transition">Create Account</button>
     </form>
   </div>
+  <script>
+  document.getElementById('menu-btn')?.addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>
   <script type="module">
     import { signIn, signUp } from '/src/js/auth.js';
     import { setLoading } from '/src/js/supabase.js';

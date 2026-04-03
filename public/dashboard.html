@@ -50,11 +50,15 @@
       </div>
     </div>
   </main>
+  <script>
+  document.getElementById('menu-btn')?.addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>
   <script type="module">
     import { requireAuth, updateNavAuth } from '/src/js/auth.js';
     import { supabase, escapeHtml } from '/src/js/supabase.js';
 
-    document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
     updateNavAuth();
     const user = await requireAuth();
 

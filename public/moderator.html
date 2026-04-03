@@ -19,6 +19,11 @@
     <h2 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Ratings</h2>
     <div id="ratings-list"></div>
   </main>
+  <script>
+  document.getElementById('menu-btn')?.addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>
   <script type="module">
     import { updateNavAuth } from '/src/js/auth.js';
     import { supabase, escapeHtml } from '/src/js/supabase.js';

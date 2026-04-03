@@ -38,7 +38,7 @@ export async function createListing(listing) {
   return data;
 }
 
-const COMP_LABELS = { paid_hourly: 'Paid (Hourly)', monthly_retainer: 'Monthly Retainer', salary: 'Salary', volunteer: 'Volunteer Mods' };
+const COMP_LABELS = { paid_hourly: 'Hourly', monthly_retainer: 'Monthly Retainer', salary: 'Salary', volunteer: 'Volunteer Mods' };
 const COMP_COLORS = { paid_hourly: 'text-green-700 bg-green-50', monthly_retainer: 'text-blue-700 bg-blue-50', salary: 'text-emerald-700 bg-emerald-50', volunteer: 'text-gray-600 bg-gray-100' };
 
 export function renderListingCard(listing) {

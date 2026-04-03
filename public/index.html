@@ -234,13 +234,14 @@
     </div>
   </footer>
 
+  <script>
+  document.getElementById('menu-btn')?.addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>
   <script type="module">
     import { getListings, renderListingCard } from '/src/js/listings.js';
     import { updateNavAuth } from '/src/js/auth.js';
-
-    document.getElementById('menu-btn').addEventListener('click', () => {
-      document.getElementById('mobile-menu').classList.toggle('hidden');
-    });
 
     updateNavAuth();
 

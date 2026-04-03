@@ -24,6 +24,11 @@
       <p id="apply-error" class="text-red-500 text-sm mt-2 hidden"></p>
     </div>
   </main>
+  <script>
+  document.getElementById('menu-btn')?.addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>
   <script type="module">
     import { getListing } from '/src/js/listings.js';
     import { applyToListing } from '/src/js/applications.js';

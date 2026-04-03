@@ -51,7 +51,7 @@
       </select>
       <select id="filter-comp" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
         <option value="">All Compensation Types</option>
-        <option value="paid_hourly">Paid (Hourly)</option>
+        <option value="paid_hourly">Hourly</option>
         <option value="monthly_retainer">Monthly Retainer</option>
         <option value="salary">Salary</option>
         <option value="volunteer">Volunteer Mods</option>
@@ -104,7 +104,7 @@
           <p class="text-xs font-medium text-gray-500 mb-1.5">Compensation</p>
           <select id="filter-comp-adv" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
             <option value="">All Types</option>
-            <option value="paid_hourly">Paid (Hourly)</option>
+            <option value="paid_hourly">Hourly</option>
             <option value="monthly_retainer">Monthly Retainer</option>
             <option value="salary">Salary</option>
             <option value="volunteer">Volunteer Mods</option>
@@ -133,10 +133,14 @@
   <style>
     .active-pill { border-color: #0ea5e9; color: #0ea5e9; background: #f0f9ff; }
   </style>
+  <script>
+  document.getElementById('menu-btn')?.addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>
   <script type="module">
     import { getListings, renderListingCard } from '/src/js/listings.js';
     import { updateNavAuth } from '/src/js/auth.js';
-    document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
     updateNavAuth();
 
     // Pre-select platform from URL param (e.g. ?platform=Discord from homepage links)
