@@ -227,24 +227,41 @@
       </p>
       <form id="contact-form" class="space-y-4">
         <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY" />
-        <input type="hidden" name="subject" value="Mods4Hire Contact Form" />
         <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+            <input name="name" type="text" required maxlength="80" placeholder="Jane Smith" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Your Email</label>
+            <input name="email" type="email" required placeholder="you@example.com" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+          </div>
+        </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
           <input name="subject_line" type="text" required maxlength="120" placeholder="What's this about?" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
-          <textarea name="message" rows="5" required maxlength="2000" placeholder="Tell us what's on your mind…" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Your Email <span class="text-gray-400 font-normal">(so we can reply)</span></label>
-          <input name="email" type="email" required placeholder="you@example.com" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+          <div class="flex justify-between mb-1">
+            <label class="block text-sm font-medium text-gray-700">Message</label>
+            <span id="msg-count" class="text-xs text-gray-400">0 / 2000</span>
+          </div>
+          <textarea id="contact-message" name="message" rows="5" required maxlength="2000" placeholder="Tell us what's on your mind…" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
         </div>
         <p id="contact-error" class="text-red-500 text-sm hidden"></p>
-        <p id="contact-success" class="text-green-600 text-sm hidden">Message sent! We'll be in touch soon.</p>
-        <button type="submit" id="contact-btn" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-lg font-medium transition-colors text-sm">Send Message</button>
+        <button type="submit" id="contact-btn" class="w-full bg-sky-600 hover:bg-sky-700 disabled:opacity-60 disabled:cursor-not-allowed text-white py-2.5 rounded-lg font-medium transition-colors text-sm">Send Message</button>
       </form>
+
+      <!-- Success state (hidden until sent) -->
+      <div id="contact-success" class="hidden text-center py-8">
+        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Message sent!</h3>
+        <p class="text-gray-500 text-sm mb-4">We'll get back to you as soon as we can.</p>
+        <button id="contact-again" class="text-sky-600 hover:underline text-sm">Send another message</button>
+      </div>
     </div>
   </section>
 
@@ -273,24 +290,46 @@
 
     updateNavAuth();
 
-    // Contact form
-    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+    // Contact form — character counter
+    const msgArea = document.getElementById('contact-message');
+    const msgCount = document.getElementById('msg-count');
+    msgArea.addEventListener('input', () => { msgCount.textContent = `${msgArea.value.length} / 2000`; });
+
+    // Contact form — submission
+    const contactForm = document.getElementById('contact-form');
+    const contactSuccess = document.getElementById('contact-success');
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('contact-btn');
       const err = document.getElementById('contact-error');
-      const ok  = document.getElementById('contact-success');
-      err.classList.add('hidden'); ok.classList.add('hidden');
+      err.classList.add('hidden');
       btn.disabled = true; btn.textContent = 'Sending…';
-      const fd = new FormData(e.target);
-      // Merge subject_line into the web3forms subject field
+      const fd = new FormData(contactForm);
       fd.set('subject', `Mods4Hire — ${fd.get('subject_line')}`);
       try {
         const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
         const json = await res.json();
-        if (json.success) { ok.classList.remove('hidden'); e.target.reset(); }
-        else { err.textContent = json.message || 'Something went wrong. Please try again.'; err.classList.remove('hidden'); }
-      } catch { err.textContent = 'Network error. Please try again.'; err.classList.remove('hidden'); }
-      finally { btn.disabled = false; btn.textContent = 'Send Message'; }
+        if (json.success) {
+          contactForm.classList.add('hidden');
+          contactSuccess.classList.remove('hidden');
+        } else {
+          err.textContent = json.message || 'Something went wrong. Please try again.';
+          err.classList.remove('hidden');
+        }
+      } catch {
+        err.textContent = 'Network error. Please try again.';
+        err.classList.remove('hidden');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Send Message';
+      }
+    });
+
+    // "Send another message" resets the form
+    document.getElementById('contact-again').addEventListener('click', () => {
+      contactForm.reset();
+      msgCount.textContent = '0 / 2000';
+      contactSuccess.classList.add('hidden');
+      contactForm.classList.remove('hidden');
     });
 
     getListings({ pageSize: 6 }).then(listings => {
