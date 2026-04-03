@@ -34,42 +34,261 @@
       </div>
     </div>
   </nav>
+
   <main class="max-w-6xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">Browse Moderators</h1>
+    <h1 class="text-2xl font-bold text-gray-900 mb-5">Browse Moderators</h1>
+
+    <!-- ── Main filters ──────────────────────────────────────────────────── -->
+    <div class="flex flex-wrap gap-3 mb-3">
+      <select id="filter-platform" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+        <option value="">All Platforms</option>
+        <option value="Discord">Discord</option>
+        <option value="TeamSpeak">TeamSpeak</option>
+        <option value="Reddit">Reddit</option>
+        <option value="Twitch">Twitch</option>
+        <option value="Games">Gaming</option>
+        <option value="Forum">Forum</option>
+        <option value="Other">Other</option>
+      </select>
+      <select id="filter-rating" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+        <option value="">⭐ Any Rating</option>
+        <option value="3">⭐ 3+ Stars</option>
+        <option value="4">⭐ 4+ Stars</option>
+        <option value="4.5">⭐ 4.5+ Stars</option>
+      </select>
+      <select id="filter-sort" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+        <option value="rating">Highest Rated</option>
+        <option value="reviews">Most Reviews</option>
+        <option value="newest">Newest</option>
+      </select>
+      <button id="toggle-advanced" class="ml-auto flex items-center gap-1.5 text-sm text-gray-500 hover:text-sky-600 border border-gray-300 rounded-lg px-3 py-1.5 bg-white transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 010 2H4a1 1 0 01-1-1zm3 6a1 1 0 011-1h10a1 1 0 010 2H7a1 1 0 01-1-1zm3 6a1 1 0 011-1h4a1 1 0 010 2h-4a1 1 0 01-1-1z"/></svg>
+        Advanced Filters
+      </button>
+    </div>
+
+    <!-- ── Advanced filters ───────────────────────────────────────────────── -->
+    <div id="advanced-filters" class="hidden mb-5 p-5 bg-white border border-gray-200 rounded-xl space-y-5">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Advanced Filters</p>
+        <button id="reset-filters" class="text-xs text-sky-600 hover:underline">Reset all</button>
+      </div>
+
+      <!-- Communication servers -->
+      <div>
+        <p class="text-xs font-medium text-gray-500 mb-2">Communication Servers</p>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" data-adv-platform="Discord"   class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Discord</button>
+          <button type="button" data-adv-platform="TeamSpeak" class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">TeamSpeak</button>
+        </div>
+      </div>
+
+      <!-- Streaming -->
+      <div>
+        <p class="text-xs font-medium text-gray-500 mb-2">Streaming</p>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" data-adv-platform="Twitch"  class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Twitch</button>
+          <button type="button" data-adv-platform="Kick"    class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Kick</button>
+          <button type="button" data-adv-platform="YouTube" class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">YouTube</button>
+        </div>
+      </div>
+
+      <!-- Forums & communities -->
+      <div>
+        <p class="text-xs font-medium text-gray-500 mb-2">Forums & Communities</p>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" data-adv-platform="Reddit"          class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Reddit</button>
+          <button type="button" data-adv-platform="Forum"           class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">phpBB / XenForo / Discourse</button>
+          <button type="button" data-adv-platform="Steam"           class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Steam Discussions</button>
+          <button type="button" data-adv-platform="Facebook Groups" class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Facebook Groups</button>
+          <button type="button" data-adv-platform="Other"           class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Custom / Other</button>
+        </div>
+      </div>
+
+      <!-- Game servers -->
+      <div>
+        <p class="text-xs font-medium text-gray-500 mb-2">Game Servers</p>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" data-adv-platform="Garry's Mod" class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Garry's Mod</button>
+          <button type="button" data-adv-platform="Rust"        class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Rust</button>
+          <button type="button" data-adv-platform="Minecraft"   class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Minecraft</button>
+          <button type="button" data-adv-platform="FiveM"       class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">FiveM / GTA RP</button>
+          <button type="button" data-adv-platform="Ark"         class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Ark: Survival</button>
+          <button type="button" data-adv-platform="DayZ"        class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">DayZ</button>
+          <button type="button" data-adv-platform="CS2"         class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">CS2</button>
+          <button type="button" data-adv-platform="Unturned"    class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Unturned</button>
+          <button type="button" data-adv-platform="Other Game"  class="adv-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Other Game</button>
+        </div>
+      </div>
+
+      <!-- Row: hours + rating + sort -->
+      <div class="flex flex-wrap gap-4 pt-1 border-t border-gray-100">
+        <div>
+          <p class="text-xs font-medium text-gray-500 mb-1.5">Availability (hrs/week)</p>
+          <select id="filter-hours" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+            <option value="">Any</option>
+            <option value="5">Up to 5 hrs</option>
+            <option value="15">Up to 15 hrs</option>
+            <option value="30">Up to 30 hrs</option>
+            <option value="60">Up to 60 hrs</option>
+          </select>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 mb-1.5">Min. Rating</p>
+          <select id="filter-rating-adv" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+            <option value="">Any Rating</option>
+            <option value="3">3+ Stars</option>
+            <option value="4">4+ Stars</option>
+            <option value="4.5">4.5+ Stars</option>
+          </select>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 mb-1.5">Sort by</p>
+          <select id="filter-sort-adv" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+            <option value="rating">Highest Rated</option>
+            <option value="reviews">Most Reviews</option>
+            <option value="newest">Newest</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <div id="mods-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <p class="text-gray-400 text-sm">Loading…</p>
     </div>
+    <div class="mt-8 text-center">
+      <button id="load-more" class="hidden text-sky-600 hover:underline text-sm">Load more</button>
+    </div>
   </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer class="bg-white border-t border-gray-100 py-8 mt-10">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <span class="text-sky-600 font-bold">Mods4Hire</span>
+      <div class="flex items-center gap-6 text-xs text-gray-400">
+        <a href="/listings.html" class="hover:text-gray-600 transition-colors">Browse Listings</a>
+        <a href="/moderators.html" class="hover:text-gray-600 transition-colors">Moderators</a>
+        <a href="/listings-new.html" class="hover:text-gray-600 transition-colors">Create a Listing</a>
+        <a href="/platforms.html" class="hover:text-gray-600 transition-colors">Platforms</a>
+        <a href="/contact.html" class="hover:text-gray-600 transition-colors">Contact Us</a>
+        <a href="/login.html" class="hover:text-gray-600 transition-colors">Sign In</a>
+      </div>
+      <p class="text-xs text-gray-400">© 2026 Mods4Hire. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <style>
+    .active-pill { border-color: #0ea5e9; color: #0ea5e9; background: #f0f9ff; }
+  </style>
   <script>
     document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
   </script>
   <script type="module">
     import { supabase, escapeHtml } from '/src/js/supabase.js';
     import { updateNavAuth } from '/src/js/auth.js';
-
     updateNavAuth();
-    const { data: mods } = await supabase
-      .from('profiles')
-      .select('id, username, rating_avg, rating_count, bio, moderator_profiles(platforms, hours_per_week)')
-      .in('role', ['moderator','both'])
-      .order('rating_avg', { ascending: false })
-      .limit(24);
 
-    const grid = document.getElementById('mods-grid');
-    grid.innerHTML = '';
-    if (!mods?.length) { grid.innerHTML = '<p class="text-gray-400 text-sm">No moderators yet.</p>'; }
-    else mods.forEach(m => {
-      const div = document.createElement('div');
-      div.className = 'bg-white border border-gray-200 rounded-xl p-5 cursor-pointer hover:shadow-md transition';
-      div.innerHTML = `
-        <h3 class="font-semibold text-gray-900">${escapeHtml(m.username)}</h3>
-        <p class="text-yellow-500 text-sm">⭐ ${m.rating_avg} <span class="text-gray-400">(${m.rating_count})</span></p>
-        ${m.bio ? `<p class="text-gray-500 text-sm mt-1 line-clamp-2">${escapeHtml(m.bio)}</p>` : ''}
-        <div class="flex flex-wrap gap-1 mt-2">${(m.moderator_profiles?.platforms||[]).map(p=>`<span class="text-xs bg-sky-50 text-sky-700 px-2 py-0.5 rounded">${escapeHtml(p)}</span>`).join('')}</div>
-      `;
-      div.addEventListener('click', () => { window.location.href = `/moderator.html?id=${m.id}`; });
-      grid.appendChild(div);
+    // Advanced filters toggle
+    document.getElementById('toggle-advanced').addEventListener('click', () => {
+      const panel = document.getElementById('advanced-filters');
+      panel.classList.toggle('hidden');
+      const btn = document.getElementById('toggle-advanced');
+      btn.classList.toggle('text-sky-600', !panel.classList.contains('hidden'));
+      btn.classList.toggle('border-sky-400', !panel.classList.contains('hidden'));
     });
+
+    // Sync rating + sort between main bar and advanced panel
+    function syncSelects(a, b) {
+      document.getElementById(a).addEventListener('change', () => { document.getElementById(b).value = document.getElementById(a).value; page = 0; load(); });
+      document.getElementById(b).addEventListener('change', () => { document.getElementById(a).value = document.getElementById(b).value; page = 0; load(); });
+    }
+    syncSelects('filter-rating', 'filter-rating-adv');
+    syncSelects('filter-sort', 'filter-sort-adv');
+
+    // Advanced platform pills
+    let activeAdvPlatform = '';
+    document.querySelectorAll('.adv-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const isActive = pill.classList.contains('active-pill');
+        document.querySelectorAll('.adv-pill').forEach(p => p.classList.remove('active-pill'));
+        if (!isActive) { pill.classList.add('active-pill'); activeAdvPlatform = pill.dataset.advPlatform; document.getElementById('filter-platform').value = ''; }
+        else { activeAdvPlatform = ''; }
+        page = 0; load();
+      });
+    });
+
+    document.getElementById('filter-platform').addEventListener('change', () => {
+      document.querySelectorAll('.adv-pill').forEach(p => p.classList.remove('active-pill'));
+      activeAdvPlatform = '';
+      page = 0; load();
+    });
+
+    document.getElementById('filter-hours').addEventListener('change', () => { page = 0; load(); });
+
+    // Reset all
+    document.getElementById('reset-filters').addEventListener('click', () => {
+      ['filter-platform','filter-rating','filter-sort','filter-rating-adv','filter-sort-adv','filter-hours'].forEach(id => {
+        const el = document.getElementById(id);
+        el.value = id.includes('sort') ? 'rating' : '';
+      });
+      document.querySelectorAll('.adv-pill').forEach(p => p.classList.remove('active-pill'));
+      activeAdvPlatform = '';
+      page = 0; load();
+    });
+
+    const PAGE_SIZE = 24;
+    let page = 0;
+
+    async function load() {
+      const platformFilter = activeAdvPlatform || document.getElementById('filter-platform').value;
+      const minRating = parseFloat(document.getElementById('filter-rating').value) || 0;
+      const maxHours  = parseInt(document.getElementById('filter-hours').value) || null;
+      const sortBy    = document.getElementById('filter-sort').value;
+
+      const orderMap = { rating: { col: 'rating_avg', asc: false }, reviews: { col: 'rating_count', asc: false }, newest: { col: 'created_at', asc: false } };
+      const { col, asc } = orderMap[sortBy] || orderMap.rating;
+
+      let q = supabase
+        .from('profiles')
+        .select('id, username, rating_avg, rating_count, bio, created_at, moderator_profiles(platforms, hours_per_week)')
+        .in('role', ['moderator', 'both'])
+        .order(col, { ascending: asc })
+        .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+
+      if (minRating) q = q.gte('rating_avg', minRating);
+
+      const { data: mods } = await q;
+
+      // Client-side filters for joined-table columns
+      let filtered = mods || [];
+      if (platformFilter) filtered = filtered.filter(m => (m.moderator_profiles?.platforms || []).some(p => p.toLowerCase().includes(platformFilter.toLowerCase())));
+      if (maxHours)       filtered = filtered.filter(m => !m.moderator_profiles?.hours_per_week || m.moderator_profiles.hours_per_week <= maxHours);
+
+      const grid = document.getElementById('mods-grid');
+      if (page === 0) grid.innerHTML = '';
+      if (!filtered.length && page === 0) { grid.innerHTML = '<p class="text-gray-400 text-sm">No moderators found.</p>'; return; }
+
+      filtered.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'bg-white border border-gray-200 rounded-xl p-5 cursor-pointer hover:shadow-md hover:border-sky-300 transition listing-card';
+        div.innerHTML = `
+          <div class="flex items-start justify-between mb-1">
+            <h3 class="font-semibold text-gray-900">${escapeHtml(m.username)}</h3>
+            ${m.rating_count > 0 ? `<span class="text-yellow-500 text-sm shrink-0 ml-2">⭐ ${Number(m.rating_avg).toFixed(1)} <span class="text-gray-400 text-xs">(${m.rating_count})</span></span>` : '<span class="text-gray-400 text-xs ml-2">No ratings yet</span>'}
+          </div>
+          ${m.bio ? `<p class="text-gray-500 text-sm mt-1 mb-2 line-clamp-2">${escapeHtml(m.bio)}</p>` : ''}
+          <div class="flex flex-wrap gap-1 mt-2">${(m.moderator_profiles?.platforms || []).map(p => `<span class="text-xs bg-sky-50 text-sky-700 px-2 py-0.5 rounded">${escapeHtml(p)}</span>`).join('')}</div>
+          ${m.moderator_profiles?.hours_per_week ? `<p class="text-xs text-gray-400 mt-2">${m.moderator_profiles.hours_per_week} hrs/week available</p>` : ''}
+        `;
+        div.addEventListener('click', () => { window.location.href = `/moderator.html?id=${m.id}`; });
+        grid.appendChild(div);
+      });
+
+      document.getElementById('load-more').classList.toggle('hidden', filtered.length < PAGE_SIZE);
+    }
+
+    load();
+    document.getElementById('load-more').addEventListener('click', () => { page++; load(); });
   </script>
 </body>
 </html>
