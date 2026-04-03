@@ -26,10 +26,10 @@ export async function signUp(email, password, username, role) {
   if (error) throw error;
 
   if (data.user) {
-    const { error: pe } = await supabase.from('profiles').insert({ id: data.user.id, username, role });
+    const { error: pe } = await supabase.from('profiles').upsert({ id: data.user.id, username, role }, { onConflict: 'id' });
     if (pe) throw pe;
     if (role === 'moderator' || role === 'both') {
-      await supabase.from('moderator_profiles').insert({ user_id: data.user.id });
+      await supabase.from('moderator_profiles').upsert({ id: data.user.id }, { onConflict: 'id' });
     }
   }
   return data;
