@@ -1,8 +1,8 @@
 // Mods4Hire — Supabase client (anon key only — never expose service role key client-side)
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || 'REPLACE_WITH_YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || 'REPLACE_WITH_YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://nadlasxszwfeevcxrffl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hZGxhc3hzendmZWV2Y3hyZmZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5NjM5NjUsImV4cCI6MjA4OTUzOTk2NX0.QPJxUY780QkptBOff3pUBoONlefsQCoYsmT-DENvMAI';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   db: { schema: 'mods4hire' },
