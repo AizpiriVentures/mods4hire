@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supported Platforms — Mods4Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- ── Nav ──────────────────────────────────────────────────────────── -->
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center justify-between h-14">
+        <a href="/" class="text-xl font-bold text-sky-600 shrink-0">Mods4Hire</a>
+        <div class="hidden md:flex items-center gap-6">
+          <a href="/listings.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Browse Listings</a>
+          <a href="/moderators.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Moderators</a>
+        </div>
+        <div class="hidden md:flex items-center gap-3">
+          <a href="/listings-new.html" class="bg-sky-600 hover:bg-sky-700 text-white text-sm px-4 py-2 rounded-lg font-medium transition-colors">Create a Listing</a>
+          <div id="auth-links" class="flex items-center gap-3"></div>
+        </div>
+        <div class="flex md:hidden items-center gap-2">
+          <a href="/listings-new.html" class="bg-sky-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium">Post</a>
+          <button id="menu-btn" aria-label="Open menu" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 py-3 space-y-0.5 pb-4">
+        <a href="/listings.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg">Browse Listings</a>
+        <a href="/moderators.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg">Moderators</a>
+        <div id="mobile-auth-links" class="pt-2 border-t border-gray-100 mt-2"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <a href="/" class="text-sm text-sky-600 hover:underline mb-6 inline-block">← Back to home</a>
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-3">All supported platforms</h1>
+    <p class="text-gray-500 text-base mb-10">
+      Mods4Hire supports moderation listings for any online community. Below are the platforms and environments where moderators are commonly placed. If your platform isn't listed, post a listing and select "Other" — our community covers a wide range of environments.
+    </p>
+
+    <!-- ── Communication & Social ───────────────────────────────────────── -->
+    <div class="mb-10">
+      <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Communication & Social</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href="/listings.html?platform=Discord" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Discord</h3>
+          <p class="text-gray-500 text-sm">Server moderation, channel management, bot oversight, role management, and community events.</p>
+        </a>
+        <a href="/listings.html?platform=Reddit" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Reddit</h3>
+          <p class="text-gray-500 text-sm">Subreddit moderation, post review, AutoModerator configuration, flair management, and community rules enforcement.</p>
+        </a>
+        <a href="/listings.html?platform=Twitch" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Twitch</h3>
+          <p class="text-gray-500 text-sm">Chat moderation, timeout and ban management, stream event coordination, and Twitch points oversight.</p>
+        </a>
+        <a href="/listings.html?platform=TeamSpeak" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">TeamSpeak</h3>
+          <p class="text-gray-500 text-sm">Server administration, channel hierarchy management, permission group setup, and voice moderation.</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Forums & Communities ─────────────────────────────────────────── -->
+    <div class="mb-10">
+      <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Forums & Communities</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">phpBB / XenForo / Discourse</h3>
+          <p class="text-gray-500 text-sm">Traditional forum platforms requiring thread moderation, spam removal, user ban management, and report handling.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Custom Forums</h3>
+          <p class="text-gray-500 text-sm">Proprietary or self-hosted community forums for games, brands, and organizations with custom moderation tooling.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Steam Discussions & Groups</h3>
+          <p class="text-gray-500 text-sm">Game hub moderation, Steam group management, community hub post review, and region-specific community oversight.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Facebook Groups</h3>
+          <p class="text-gray-500 text-sm">Group post approval, member request review, rule enforcement, and community growth moderation.</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Game Servers & In-Game Admin ─────────────────────────────────── -->
+    <div class="mb-10">
+      <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Game Servers & In-Game Admin</h2>
+      <p class="text-gray-500 text-sm mb-5">
+        In-game administrators serve as a human enforcement layer alongside anti-cheat systems. They respond to player reports in real time, review evidence, issue context-aware bans, and help maintain fair competitive environments on game servers.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Garry's Mod Servers</h3>
+          <p class="text-gray-500 text-sm">DarkRP, TTT, PropHunt and other gamemode admins. Staff for rule enforcement, sit handling, and server health.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Rust Servers</h3>
+          <p class="text-gray-500 text-sm">Admin and moderator roles for private and community Rust servers. Cheat report handling, ban review, and wipe coordination.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Minecraft Servers</h3>
+          <p class="text-gray-500 text-sm">Staff for modding, player report handling, grief investigation, economy oversight, and event management.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">FiveM / GTA Roleplay</h3>
+          <p class="text-gray-500 text-sm">Staff for RP rule enforcement, report resolution, whitelist management, and faction moderation on GTA V RP servers.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Ark: Survival Evolved / Ascended</h3>
+          <p class="text-gray-500 text-sm">Tribe conflict moderation, cheat investigation, dino and structure rollbacks, and server rule enforcement.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Other Game Servers</h3>
+          <p class="text-gray-500 text-sm">Private servers for any multiplayer game. If your game has a community server and a rule set, it needs moderation.</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Other ─────────────────────────────────────────────────────────── -->
+    <div class="mb-12">
+      <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Other Platforms</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Kick</h3>
+          <p class="text-gray-500 text-sm">Live stream chat moderation, channel subscriber management, and community rule enforcement.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">YouTube Community</h3>
+          <p class="text-gray-500 text-sm">Live chat moderation during streams and premieres, comment review, and member management.</p>
+        </a>
+        <a href="/listings.html?platform=Other" class="bg-white border border-gray-200 rounded-xl p-5 hover:border-sky-300 hover:shadow-sm transition group">
+          <h3 class="font-semibold text-gray-900 group-hover:text-sky-600 mb-1">Don't see your platform?</h3>
+          <p class="text-gray-500 text-sm">Post a listing with "Other" selected and describe your platform. The right moderator is out there.</p>
+        </a>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <a href="/listings-new.html" class="bg-sky-600 hover:bg-sky-700 text-white px-7 py-3 rounded-xl font-medium transition-colors text-base inline-block">Create a Listing</a>
+    </div>
+  </div>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer class="bg-white border-t border-gray-100 py-8 mt-10">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <span class="text-sky-600 font-bold">Mods4Hire</span>
+      <div class="flex items-center gap-6 text-xs text-gray-400">
+        <a href="/listings.html" class="hover:text-gray-600 transition-colors">Browse Listings</a>
+        <a href="/moderators.html" class="hover:text-gray-600 transition-colors">Moderators</a>
+        <a href="/listings-new.html" class="hover:text-gray-600 transition-colors">Create a Listing</a>
+        <a href="/login.html" class="hover:text-gray-600 transition-colors">Sign In</a>
+      </div>
+      <p class="text-xs text-gray-400">© 2026 Mods4Hire. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { updateNavAuth } from '/src/js/auth.js';
+    document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    updateNavAuth();
+  </script>
+</body>
+</html>
