@@ -35,32 +35,93 @@
     </div>
   </nav>
   <main class="max-w-6xl mx-auto px-4 py-10">
-    <div class="flex flex-wrap items-center gap-4 mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">Browse Listings</h1>
-      <select id="filter-platform" class="ml-auto border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
+    <h1 class="text-2xl font-bold text-gray-900 mb-5">Browse Listings</h1>
+
+    <!-- ── Main filters ──────────────────────────────────────────────────── -->
+    <div class="flex flex-wrap gap-3 mb-3">
+      <select id="filter-platform" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
         <option value="">All Platforms</option>
         <option value="Discord">Discord</option>
         <option value="TeamSpeak">TeamSpeak</option>
         <option value="Reddit">Reddit</option>
-        <option value="Forum">Forum</option>
         <option value="Twitch">Twitch</option>
-        <option value="Games">Games</option>
+        <option value="Games">Gaming</option>
+        <option value="Forum">Forum</option>
         <option value="Other">Other</option>
       </select>
-      <select id="filter-comp" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
+      <select id="filter-comp" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
         <option value="">All Compensation Types</option>
         <option value="paid_hourly">Paid (Hourly)</option>
         <option value="monthly_retainer">Monthly Retainer</option>
         <option value="salary">Salary</option>
         <option value="volunteer">Volunteer Mods</option>
       </select>
-      <select id="filter-rating" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
-        <option value="">Any Rating</option>
-        <option value="4.5">4.5+ Stars</option>
-        <option value="4">4+ Stars</option>
-        <option value="3">3+ Stars</option>
+      <select id="filter-rating" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+        <option value="">⭐ Any Rating</option>
+        <option value="3">⭐ 3+ Stars</option>
+        <option value="4">⭐ 4+ Stars</option>
+        <option value="4.5">⭐ 4.5+ Stars</option>
       </select>
+      <button id="toggle-advanced" class="ml-auto flex items-center gap-1.5 text-sm text-gray-500 hover:text-sky-600 border border-gray-300 rounded-lg px-3 py-1.5 bg-white transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 010 2H4a1 1 0 01-1-1zm3 6a1 1 0 011-1h10a1 1 0 010 2H7a1 1 0 01-1-1zm3 6a1 1 0 011-1h4a1 1 0 010 2h-4a1 1 0 01-1-1z"/></svg>
+        Advanced Filters
+      </button>
     </div>
+
+    <!-- ── Advanced filters (hidden by default) ──────────────────────────── -->
+    <div id="advanced-filters" class="hidden mb-5 p-4 bg-white border border-gray-200 rounded-xl space-y-4">
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Advanced Filters</p>
+
+      <!-- Specific game servers -->
+      <div>
+        <p class="text-xs font-medium text-gray-500 mb-2">Game Server</p>
+        <div class="flex flex-wrap gap-2" id="game-pills">
+          <button type="button" data-game="" class="game-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors active-pill">All</button>
+          <button type="button" data-game="Garry's Mod" class="game-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Garry's Mod</button>
+          <button type="button" data-game="Rust" class="game-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Rust</button>
+          <button type="button" data-game="Minecraft" class="game-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Minecraft</button>
+          <button type="button" data-game="FiveM" class="game-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">FiveM / GTA RP</button>
+          <button type="button" data-game="Ark" class="game-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Ark</button>
+          <button type="button" data-game="Other Game" class="game-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Other Game</button>
+        </div>
+      </div>
+
+      <!-- Specific streaming / social platforms -->
+      <div>
+        <p class="text-xs font-medium text-gray-500 mb-2">Streaming & Social</p>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" data-platform-adv="" class="adv-platform-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors active-pill">All</button>
+          <button type="button" data-platform-adv="Kick" class="adv-platform-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Kick</button>
+          <button type="button" data-platform-adv="YouTube" class="adv-platform-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">YouTube</button>
+          <button type="button" data-platform-adv="Facebook Groups" class="adv-platform-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Facebook Groups</button>
+          <button type="button" data-platform-adv="Steam" class="adv-platform-pill px-3 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-sky-400 hover:text-sky-600 transition-colors">Steam</button>
+        </div>
+      </div>
+
+      <!-- Repeat compensation + rating for completeness in advanced view -->
+      <div class="flex flex-wrap gap-3 pt-1 border-t border-gray-100">
+        <div>
+          <p class="text-xs font-medium text-gray-500 mb-1.5">Compensation</p>
+          <select id="filter-comp-adv" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+            <option value="">All Types</option>
+            <option value="paid_hourly">Paid (Hourly)</option>
+            <option value="monthly_retainer">Monthly Retainer</option>
+            <option value="salary">Salary</option>
+            <option value="volunteer">Volunteer Mods</option>
+          </select>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 mb-1.5">Min. Hirer Rating</p>
+          <select id="filter-rating-adv" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white">
+            <option value="">Any Rating</option>
+            <option value="3">3+ Stars</option>
+            <option value="4">4+ Stars</option>
+            <option value="4.5">4.5+ Stars</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <div id="listings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <p class="text-gray-400 text-sm">Loading…</p>
     </div>
@@ -68,6 +129,10 @@
       <button id="load-more" class="hidden text-sky-600 hover:underline text-sm">Load more</button>
     </div>
   </main>
+
+  <style>
+    .active-pill { border-color: #0ea5e9; color: #0ea5e9; background: #f0f9ff; }
+  </style>
   <script type="module">
     import { getListings, renderListingCard } from '/src/js/listings.js';
     import { updateNavAuth } from '/src/js/auth.js';
@@ -78,9 +143,61 @@
     const urlPlatform = new URLSearchParams(window.location.search).get('platform');
     if (urlPlatform) document.getElementById('filter-platform').value = urlPlatform;
 
+    // Advanced filters toggle
+    document.getElementById('toggle-advanced').addEventListener('click', () => {
+      const panel = document.getElementById('advanced-filters');
+      panel.classList.toggle('hidden');
+      const btn = document.getElementById('toggle-advanced');
+      btn.classList.toggle('text-sky-600', !panel.classList.contains('hidden'));
+      btn.classList.toggle('border-sky-400', !panel.classList.contains('hidden'));
+    });
+
+    // Sync advanced comp/rating selects with main ones (bidirectional)
+    function syncSelects(a, b) {
+      document.getElementById(a).addEventListener('change', () => { document.getElementById(b).value = document.getElementById(a).value; page = 0; load(); });
+      document.getElementById(b).addEventListener('change', () => { document.getElementById(a).value = document.getElementById(b).value; page = 0; load(); });
+    }
+    syncSelects('filter-comp', 'filter-comp-adv');
+    syncSelects('filter-rating', 'filter-rating-adv');
+
+    // Game server pills
+    let activeGame = '';
+    document.querySelectorAll('.game-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.game-pill').forEach(p => p.classList.remove('active-pill'));
+        pill.classList.add('active-pill');
+        activeGame = pill.dataset.game;
+        // Also set main platform filter to Games when a specific game is selected
+        if (activeGame) document.getElementById('filter-platform').value = 'Games';
+        page = 0; load();
+      });
+    });
+
+    // Streaming/social platform pills
+    let activeAdvPlatform = '';
+    document.querySelectorAll('.adv-platform-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.adv-platform-pill').forEach(p => p.classList.remove('active-pill'));
+        pill.classList.add('active-pill');
+        activeAdvPlatform = pill.dataset.platformAdv;
+        if (activeAdvPlatform) document.getElementById('filter-platform').value = 'Other';
+        page = 0; load();
+      });
+    });
+
+    // Reset advanced pills when main platform filter changes
+    document.getElementById('filter-platform').addEventListener('change', () => {
+      document.querySelectorAll('.game-pill').forEach(p => p.classList.remove('active-pill'));
+      document.querySelector('.game-pill[data-game=""]').classList.add('active-pill');
+      document.querySelectorAll('.adv-platform-pill').forEach(p => p.classList.remove('active-pill'));
+      document.querySelector('.adv-platform-pill[data-platform-adv=""]').classList.add('active-pill');
+      activeGame = ''; activeAdvPlatform = '';
+      page = 0; load();
+    });
+
     let page = 0;
     async function load() {
-      const platform = document.getElementById('filter-platform').value;
+      const platform = activeGame || activeAdvPlatform || document.getElementById('filter-platform').value;
       const comp = document.getElementById('filter-comp').value;
       const minRating = document.getElementById('filter-rating').value;
       const listings = await getListings({ page, platform: platform || undefined, compensation: comp || undefined, minRating: minRating || undefined });
@@ -91,9 +208,6 @@
       document.getElementById('load-more').classList.toggle('hidden', listings.length < 12);
     }
     load();
-    document.getElementById('filter-platform').addEventListener('change', () => { page = 0; load(); });
-    document.getElementById('filter-comp').addEventListener('change', () => { page = 0; load(); });
-    document.getElementById('filter-rating').addEventListener('change', () => { page = 0; load(); });
     document.getElementById('load-more').addEventListener('click', () => { page++; load(); });
   </script>
 </body>
