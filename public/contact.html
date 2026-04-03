@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — Mods4Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- ── Nav ──────────────────────────────────────────────────────────── -->
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center justify-between h-14">
+        <a href="/" class="text-xl font-bold text-sky-600 shrink-0">Mods4Hire</a>
+        <div class="hidden md:flex items-center gap-6">
+          <a href="/listings.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Browse Listings</a>
+          <a href="/moderators.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Moderators</a>
+        </div>
+        <div class="hidden md:flex items-center gap-3">
+          <a href="/listings-new.html" class="bg-sky-600 hover:bg-sky-700 text-white text-sm px-4 py-2 rounded-lg font-medium transition-colors">Create a Listing</a>
+          <div id="auth-links" class="flex items-center gap-3"></div>
+        </div>
+        <div class="flex md:hidden items-center gap-2">
+          <a href="/listings-new.html" class="bg-sky-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium">Post</a>
+          <button id="menu-btn" aria-label="Open menu" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 py-3 space-y-0.5 pb-4">
+        <a href="/listings.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg">Browse Listings</a>
+        <a href="/moderators.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg">Moderators</a>
+        <div id="mobile-auth-links" class="pt-2 border-t border-gray-100 mt-2"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Content ────────────────────────────────────────────────────────── -->
+  <main class="max-w-xl mx-auto px-4 py-14">
+    <a href="/" class="text-sm text-sky-600 hover:underline mb-6 inline-block">← Back to home</a>
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-3">Contact Us</h1>
+    <p class="text-gray-500 text-base mb-8 leading-relaxed">
+      Have a question, a partnership idea, or feedback about Mods4Hire? Fill out the form below and we'll get back to you directly. <br /><br />
+      <span class="text-gray-400 text-sm">This form is not for job applications. To apply for a listing, browse open listings and apply through the listing page.</span>
+    </p>
+
+    <form id="contact-form" class="space-y-5">
+      <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY" />
+      <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+          <input name="name" type="text" required maxlength="80" placeholder="Jane Smith" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Your Email</label>
+          <input name="email" type="email" required placeholder="you@example.com" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+        <input name="subject_line" type="text" required maxlength="120" placeholder="What's this about?" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      </div>
+      <div>
+        <div class="flex justify-between mb-1">
+          <label class="block text-sm font-medium text-gray-700">Message</label>
+          <span id="msg-count" class="text-xs text-gray-400">0 / 2000</span>
+        </div>
+        <textarea id="contact-message" name="message" rows="6" required maxlength="2000" placeholder="Tell us what's on your mind…" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+      </div>
+      <p id="contact-error" class="text-red-500 text-sm hidden"></p>
+      <button type="submit" id="contact-btn" class="w-full bg-sky-600 hover:bg-sky-700 disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors">Send Message</button>
+    </form>
+
+    <!-- Success state -->
+    <div id="contact-success" class="hidden text-center py-12">
+      <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Message sent!</h2>
+      <p class="text-gray-500 text-sm mb-5">We'll get back to you as soon as we can.</p>
+      <button id="contact-again" class="text-sky-600 hover:underline text-sm">Send another message</button>
+    </div>
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer class="bg-white border-t border-gray-100 py-8 mt-10">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <span class="text-sky-600 font-bold">Mods4Hire</span>
+      <div class="flex items-center gap-6 text-xs text-gray-400">
+        <a href="/listings.html" class="hover:text-gray-600 transition-colors">Browse Listings</a>
+        <a href="/moderators.html" class="hover:text-gray-600 transition-colors">Moderators</a>
+        <a href="/listings-new.html" class="hover:text-gray-600 transition-colors">Create a Listing</a>
+        <a href="/platforms.html" class="hover:text-gray-600 transition-colors">Platforms</a>
+        <a href="/contact.html" class="hover:text-gray-600 transition-colors">Contact Us</a>
+        <a href="/login.html" class="hover:text-gray-600 transition-colors">Sign In</a>
+      </div>
+      <p class="text-xs text-gray-400">© 2026 Mods4Hire. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { updateNavAuth } from '/src/js/auth.js';
+    document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    updateNavAuth();
+
+    const contactForm = document.getElementById('contact-form');
+    const contactSuccess = document.getElementById('contact-success');
+    const msgArea = document.getElementById('contact-message');
+    const msgCount = document.getElementById('msg-count');
+
+    msgArea.addEventListener('input', () => { msgCount.textContent = `${msgArea.value.length} / 2000`; });
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('contact-btn');
+      const err = document.getElementById('contact-error');
+      err.classList.add('hidden');
+      btn.disabled = true; btn.textContent = 'Sending…';
+      const fd = new FormData(contactForm);
+      fd.set('subject', `Mods4Hire — ${fd.get('subject_line')}`);
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
+        const json = await res.json();
+        if (json.success) { contactForm.classList.add('hidden'); contactSuccess.classList.remove('hidden'); }
+        else { err.textContent = json.message || 'Something went wrong.'; err.classList.remove('hidden'); }
+      } catch { err.textContent = 'Network error. Please try again.'; err.classList.remove('hidden'); }
+      finally { btn.disabled = false; btn.textContent = 'Send Message'; }
+    });
+
+    document.getElementById('contact-again').addEventListener('click', () => {
+      contactForm.reset(); msgCount.textContent = '0 / 2000';
+      contactSuccess.classList.add('hidden'); contactForm.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
