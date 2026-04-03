@@ -1,21 +1,30 @@
 // Mods4Hire — Job listing CRUD and rendering
 import { supabase, escapeHtml } from './supabase.js';
 
-export async function getListings({ page = 0, pageSize = 12, platform, compensation, minRating } = {}) {
+export async function getListings({ page = 0, pageSize = 12, platform, compensation, minRating, maxHours, hasDeadline, sortBy = 'newest' } = {}) {
+  const orderMap = {
+    newest:   { col: 'created_at', asc: false },
+    oldest:   { col: 'created_at', asc: true },
+    deadline: { col: 'deadline',   asc: true },
+  };
+  const { col, asc } = orderMap[sortBy] || orderMap.newest;
+
   let q = supabase
     .from('job_listings')
     .select('id, title, platform, hours_per_week, compensation_type, community_type, deadline, created_at, profiles:hirer_id(username, rating_avg, rating_count)')
     .eq('status', 'open')
-    .order('created_at', { ascending: false })
+    .order(col, { ascending: asc })
     .range(page * pageSize, (page + 1) * pageSize - 1);
 
-  if (platform) q = q.contains('platform', [platform]);
+  if (platform)    q = q.contains('platform', [platform]);
   if (compensation) q = q.eq('compensation_type', compensation);
+  if (maxHours)    q = q.lte('hours_per_week', parseInt(maxHours));
+  if (hasDeadline) q = q.not('deadline', 'is', null);
 
   const { data, error } = await q;
   if (error) throw error;
 
-  // Rating filter is applied client-side (filtering on joined column)
+  // Rating filter applied client-side (can't filter on joined column server-side)
   if (minRating) {
     return (data || []).filter(l => (l.profiles?.rating_avg ?? 0) >= parseFloat(minRating));
   }
