@@ -4,7 +4,9 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || 'REPLACE_WITH_YOUR_SUPABASE_URL';
 const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || 'REPLACE_WITH_YOUR_SUPABASE_ANON_KEY';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  db: { schema: 'mods4hire' },
+});
 
 export function showToast(message, type = 'success') {
   const toast = document.createElement('div');
