@@ -161,41 +161,23 @@
     </div>
   </main>
 
-  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
-  <footer class="bg-white border-t border-gray-100 py-8 mt-10">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <span class="text-sky-600 font-bold">Mods4Hire</span>
-      <div class="flex items-center gap-6 text-xs text-gray-400">
-        <a href="/listings.html" class="hover:text-gray-600 transition-colors">Browse Listings</a>
-        <a href="/moderators.html" class="hover:text-gray-600 transition-colors">Moderators</a>
-        <a href="/listings-new.html" class="hover:text-gray-600 transition-colors">Create a Listing</a>
-        <a href="/platforms.html" class="hover:text-gray-600 transition-colors">Platforms</a>
-        <a href="/contact.html" class="hover:text-gray-600 transition-colors">Contact Us</a>
-        <a href="/login.html" class="hover:text-gray-600 transition-colors">Sign In</a>
-      </div>
-      <p class="text-xs text-gray-400">© 2026 Mods4Hire. All rights reserved.</p>
-    </div>
-  </footer>
-
   <style>
     .active-pill { border-color: #0ea5e9; color: #0ea5e9; background: #f0f9ff; }
   </style>
   <script>
     document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
-  </script>
-  <script type="module">
-    import { supabase, escapeHtml } from '/src/js/supabase.js';
-    import { updateNavAuth } from '/src/js/auth.js';
-    updateNavAuth();
-
-    // Advanced filters toggle
-    document.getElementById('toggle-advanced').addEventListener('click', () => {
+    document.getElementById('toggle-advanced')?.addEventListener('click', () => {
       const panel = document.getElementById('advanced-filters');
       panel.classList.toggle('hidden');
       const btn = document.getElementById('toggle-advanced');
       btn.classList.toggle('text-sky-600', !panel.classList.contains('hidden'));
       btn.classList.toggle('border-sky-400', !panel.classList.contains('hidden'));
     });
+  </script>
+  <script type="module">
+    import { supabase, escapeHtml } from '/src/js/supabase.js';
+    import { updateNavAuth } from '/src/js/auth.js';
+    updateNavAuth();
 
     // Sync rating + sort between main bar and advanced panel
     function syncSelects(a, b) {

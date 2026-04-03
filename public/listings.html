@@ -182,10 +182,15 @@
     .active-pill { border-color: #0ea5e9; color: #0ea5e9; background: #f0f9ff; }
   </style>
   <script>
-  document.getElementById('menu-btn')?.addEventListener('click', () => {
-    document.getElementById('mobile-menu').classList.toggle('hidden');
-  });
-</script>
+    document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    document.getElementById('toggle-advanced')?.addEventListener('click', () => {
+      const panel = document.getElementById('advanced-filters');
+      panel.classList.toggle('hidden');
+      const btn = document.getElementById('toggle-advanced');
+      btn.classList.toggle('text-sky-600', !panel.classList.contains('hidden'));
+      btn.classList.toggle('border-sky-400', !panel.classList.contains('hidden'));
+    });
+  </script>
   <script type="module">
     import { getListings, renderListingCard } from '/src/js/listings.js';
     import { updateNavAuth } from '/src/js/auth.js';
@@ -194,15 +199,6 @@
     // Pre-select platform from URL param (e.g. ?platform=Discord from homepage links)
     const urlPlatform = new URLSearchParams(window.location.search).get('platform');
     if (urlPlatform) document.getElementById('filter-platform').value = urlPlatform;
-
-    // Advanced filters toggle
-    document.getElementById('toggle-advanced').addEventListener('click', () => {
-      const panel = document.getElementById('advanced-filters');
-      panel.classList.toggle('hidden');
-      const btn = document.getElementById('toggle-advanced');
-      btn.classList.toggle('text-sky-600', !panel.classList.contains('hidden'));
-      btn.classList.toggle('border-sky-400', !panel.classList.contains('hidden'));
-    });
 
     // Sync advanced comp/rating selects with main filter bar (bidirectional)
     function syncSelects(a, b) {
