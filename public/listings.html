@@ -39,13 +39,26 @@
       <h1 class="text-2xl font-bold text-gray-900">Browse Listings</h1>
       <select id="filter-platform" class="ml-auto border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
         <option value="">All Platforms</option>
-        <option>Discord</option><option>TeamSpeak</option><option>Reddit</option><option>Forum</option><option>Twitch</option>
+        <option value="Discord">Discord</option>
+        <option value="TeamSpeak">TeamSpeak</option>
+        <option value="Reddit">Reddit</option>
+        <option value="Forum">Forum</option>
+        <option value="Twitch">Twitch</option>
+        <option value="Games">Games</option>
+        <option value="Other">Other</option>
       </select>
       <select id="filter-comp" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
-        <option value="">All Compensation</option>
-        <option value="paid_hourly">Paid Hourly</option>
+        <option value="">All Compensation Types</option>
+        <option value="paid_hourly">Paid (Hourly)</option>
         <option value="monthly_retainer">Monthly Retainer</option>
-        <option value="volunteer">Volunteer</option>
+        <option value="salary">Salary</option>
+        <option value="volunteer">Volunteer Mods</option>
+      </select>
+      <select id="filter-rating" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
+        <option value="">Any Rating</option>
+        <option value="4.5">4.5+ Stars</option>
+        <option value="4">4+ Stars</option>
+        <option value="3">3+ Stars</option>
       </select>
     </div>
     <div id="listings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -60,11 +73,17 @@
     import { updateNavAuth } from '/src/js/auth.js';
     document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
     updateNavAuth();
+
+    // Pre-select platform from URL param (e.g. ?platform=Discord from homepage links)
+    const urlPlatform = new URLSearchParams(window.location.search).get('platform');
+    if (urlPlatform) document.getElementById('filter-platform').value = urlPlatform;
+
     let page = 0;
     async function load() {
       const platform = document.getElementById('filter-platform').value;
       const comp = document.getElementById('filter-comp').value;
-      const listings = await getListings({ page, platform: platform || undefined, compensation: comp || undefined });
+      const minRating = document.getElementById('filter-rating').value;
+      const listings = await getListings({ page, platform: platform || undefined, compensation: comp || undefined, minRating: minRating || undefined });
       const grid = document.getElementById('listings-grid');
       if (page === 0) grid.innerHTML = '';
       if (!listings.length && page === 0) { grid.innerHTML = '<p class="text-gray-400 text-sm">No listings found.</p>'; return; }
@@ -74,6 +93,7 @@
     load();
     document.getElementById('filter-platform').addEventListener('change', () => { page = 0; load(); });
     document.getElementById('filter-comp').addEventListener('change', () => { page = 0; load(); });
+    document.getElementById('filter-rating').addEventListener('change', () => { page = 0; load(); });
     document.getElementById('load-more').addEventListener('click', () => { page++; load(); });
   </script>
 </body>

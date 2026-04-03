@@ -47,8 +47,9 @@
           <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Discord" class="rounded" /> Discord</label>
           <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="TeamSpeak" class="rounded" /> TeamSpeak</label>
           <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Reddit" class="rounded" /> Reddit</label>
-          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Forum" class="rounded" /> Forum</label>
           <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Twitch" class="rounded" /> Twitch</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Games" class="rounded" /> Gaming</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Forum" class="rounded" /> Forum</label>
           <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Other" class="rounded" /> Other</label>
         </div>
       </div>
@@ -58,7 +59,8 @@
           <select name="compensation_type" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
             <option value="paid_hourly">Paid (Hourly)</option>
             <option value="monthly_retainer">Monthly Retainer</option>
-            <option value="volunteer">Volunteer</option>
+            <option value="salary">Salary</option>
+            <option value="volunteer">Volunteer Mods</option>
           </select>
         </div>
         <div>
@@ -74,6 +76,56 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">Application Deadline</label>
         <input name="deadline" type="date" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
       </div>
+
+      <!-- ── Role Details (expandable) ──────────────────────────────────── -->
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <button type="button" id="toggle-role" class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left">
+          <span class="text-sm font-medium text-gray-700">Role Details <span class="text-gray-400 font-normal">(optional)</span></span>
+          <svg id="toggle-role-icon" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div id="role-details" class="hidden px-4 py-4 space-y-4 border-t border-gray-200">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Community Size</label>
+            <select name="community_size" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
+              <option value="">Not specified</option>
+              <option value="small">Small (under 1,000 members)</option>
+              <option value="medium">Medium (1,000 – 10,000 members)</option>
+              <option value="large">Large (10,000 – 100,000 members)</option>
+              <option value="xlarge">Extra Large (100,000+ members)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Experience Level Required</label>
+            <select name="experience_level" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
+              <option value="">Any experience</option>
+              <option value="beginner">Beginner — willing to train</option>
+              <option value="intermediate">Intermediate — some prior mod experience</option>
+              <option value="experienced">Experienced — proven moderation track record</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Responsibilities</label>
+            <textarea name="responsibilities" rows="3" maxlength="1000" placeholder="Describe the day-to-day responsibilities of this role…" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Time Zone Preference</label>
+            <input name="timezone_pref" type="text" maxlength="100" placeholder="e.g. UTC, EST, flexible" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Additional Notes (expandable) ──────────────────────────────── -->
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <button type="button" id="toggle-notes" class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left">
+          <span class="text-sm font-medium text-gray-700">Additional Notes <span class="text-gray-400 font-normal">(optional)</span></span>
+          <svg id="toggle-notes-icon" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div id="notes-details" class="hidden px-4 py-4 border-t border-gray-200">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Notes for applicants</label>
+          <textarea name="additional_notes" rows="4" maxlength="1500" placeholder="Anything else applicants should know — perks, team culture, trial period, how to stand out…" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none"></textarea>
+        </div>
+      </div>
+
       <p id="form-error" class="text-red-500 text-sm hidden"></p>
       <button type="submit" id="submit-btn" class="w-full bg-sky-600 text-white py-3 rounded-lg font-medium hover:bg-sky-700 transition">Post Listing</button>
     </form>
@@ -86,6 +138,18 @@
     document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
     updateNavAuth();
     const user = await requireAuth();
+
+    // Expandable section toggles
+    function setupToggle(btnId, panelId, iconId) {
+      document.getElementById(btnId).addEventListener('click', () => {
+        const panel = document.getElementById(panelId);
+        const icon = document.getElementById(iconId);
+        panel.classList.toggle('hidden');
+        icon.style.transform = panel.classList.contains('hidden') ? '' : 'rotate(180deg)';
+      });
+    }
+    setupToggle('toggle-role', 'role-details', 'toggle-role-icon');
+    setupToggle('toggle-notes', 'notes-details', 'toggle-notes-icon');
 
     document.getElementById('new-listing-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -103,6 +167,11 @@
           hours_per_week: fd.get('hours_per_week') ? parseInt(fd.get('hours_per_week')) : null,
           required_skills: fd.get('required_skills') || null,
           deadline: fd.get('deadline') || null,
+          community_size: fd.get('community_size') || null,
+          experience_level: fd.get('experience_level') || null,
+          responsibilities: fd.get('responsibilities') || null,
+          timezone_pref: fd.get('timezone_pref') || null,
+          additional_notes: fd.get('additional_notes') || null,
         });
         showToast('Job posted!');
         window.location.href = `/listing.html?id=${listing.id}`;

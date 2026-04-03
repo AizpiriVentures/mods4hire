@@ -1,10 +1,10 @@
 // Mods4Hire — Job listing CRUD and rendering
 import { supabase, escapeHtml } from './supabase.js';
 
-export async function getListings({ page = 0, pageSize = 12, platform, compensation } = {}) {
+export async function getListings({ page = 0, pageSize = 12, platform, compensation, minRating } = {}) {
   let q = supabase
     .from('job_listings')
-    .select('id, title, platform, hours_per_week, compensation_type, community_type, deadline, created_at, profiles:hirer_id(username)')
+    .select('id, title, platform, hours_per_week, compensation_type, community_type, deadline, created_at, profiles:hirer_id(username, rating_avg, rating_count)')
     .eq('status', 'open')
     .order('created_at', { ascending: false })
     .range(page * pageSize, (page + 1) * pageSize - 1);
@@ -14,7 +14,12 @@ export async function getListings({ page = 0, pageSize = 12, platform, compensat
 
   const { data, error } = await q;
   if (error) throw error;
-  return data;
+
+  // Rating filter is applied client-side (filtering on joined column)
+  if (minRating) {
+    return (data || []).filter(l => (l.profiles?.rating_avg ?? 0) >= parseFloat(minRating));
+  }
+  return data || [];
 }
 
 export async function getListing(id) {
@@ -33,8 +38,8 @@ export async function createListing(listing) {
   return data;
 }
 
-const COMP_LABELS = { paid_hourly: 'Paid (Hourly)', monthly_retainer: 'Monthly Retainer', volunteer: 'Volunteer' };
-const COMP_COLORS = { paid_hourly: 'text-green-700 bg-green-50', monthly_retainer: 'text-blue-700 bg-blue-50', volunteer: 'text-gray-600 bg-gray-100' };
+const COMP_LABELS = { paid_hourly: 'Paid (Hourly)', monthly_retainer: 'Monthly Retainer', salary: 'Salary', volunteer: 'Volunteer Mods' };
+const COMP_COLORS = { paid_hourly: 'text-green-700 bg-green-50', monthly_retainer: 'text-blue-700 bg-blue-50', salary: 'text-emerald-700 bg-emerald-50', volunteer: 'text-gray-600 bg-gray-100' };
 
 export function renderListingCard(listing) {
   const div = document.createElement('div');
@@ -49,7 +54,10 @@ export function renderListingCard(listing) {
     </div>
     <div class="flex items-center justify-between text-xs text-gray-400">
       <span>${listing.hours_per_week ? listing.hours_per_week + ' hrs/week' : ''}</span>
-      <span>by ${escapeHtml(listing.profiles?.username || '—')}</span>
+      <span>
+        by ${escapeHtml(listing.profiles?.username || '—')}
+        ${listing.profiles?.rating_count > 0 ? `<span class="ml-1 text-yellow-500">⭐ ${Number(listing.profiles.rating_avg).toFixed(1)}</span>` : ''}
+      </span>
     </div>
   `;
   div.addEventListener('click', () => { window.location.href = `/listing.html?id=${listing.id}`; });
