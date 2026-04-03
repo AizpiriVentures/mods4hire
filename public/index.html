@@ -8,28 +8,78 @@
   <link rel="stylesheet" href="/src/css/styles.css" />
 </head>
 <body class="bg-gray-50 min-h-screen">
+
+  <!-- ── Nav ──────────────────────────────────────────────────────────── -->
   <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-sky-600">Mods4Hire</a>
-      <div class="flex items-center gap-4">
-        <a href="/listings.html" class="text-sm text-gray-600 hover:text-sky-600">Listings</a>
-        <a href="/moderators.html" class="text-sm text-gray-600 hover:text-sky-600">Moderators</a>
-        <div id="auth-links" class="flex items-center gap-3"></div>
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center justify-between h-14">
+
+        <!-- Brand -->
+        <a href="/" class="text-xl font-bold text-sky-600 shrink-0">Mods4Hire</a>
+
+        <!-- Desktop centre links -->
+        <div class="hidden md:flex items-center gap-6">
+          <a href="/listings.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Browse Listings</a>
+          <a href="/moderators.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Moderators</a>
+        </div>
+
+        <!-- Desktop right -->
+        <div class="hidden md:flex items-center gap-3">
+          <a href="/listings-new.html"
+            class="bg-sky-600 hover:bg-sky-700 text-white text-sm px-4 py-2 rounded-lg font-medium transition-colors">
+            + Post a Listing
+          </a>
+          <div id="auth-links" class="flex items-center gap-3"></div>
+        </div>
+
+        <!-- Mobile: compact Post button + hamburger -->
+        <div class="flex md:hidden items-center gap-2">
+          <a href="/listings-new.html"
+            class="bg-sky-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium">
+            Post
+          </a>
+          <button id="menu-btn" aria-label="Open menu"
+            class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Mobile dropdown -->
+      <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 py-3 space-y-0.5 pb-4">
+        <a href="/listings.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg transition-colors">Browse Listings</a>
+        <a href="/moderators.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg transition-colors">Moderators</a>
+        <div id="mobile-auth-links" class="pt-2 border-t border-gray-100 mt-2"></div>
       </div>
     </div>
   </nav>
 
-  <section class="max-w-4xl mx-auto px-4 py-20 text-center">
-    <h1 class="text-5xl font-extrabold text-gray-900 mb-4">Hire trusted community moderators</h1>
-    <p class="text-gray-500 text-lg mb-8">Post a listing, review applicants, and find proven mods for Discord, Reddit, forums, and more.</p>
-    <div class="flex gap-4 justify-center">
-      <a href="/listings-new.html" class="bg-sky-600 hover:bg-sky-700 text-white px-6 py-3 rounded-xl font-medium transition">Post a Job</a>
-      <a href="/moderators.html" class="border border-gray-300 hover:border-sky-400 text-gray-700 px-6 py-3 rounded-xl font-medium transition">Browse Moderators</a>
+  <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+  <section class="max-w-4xl mx-auto px-4 py-16 sm:py-24 text-center">
+    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+      Hire trusted community moderators
+    </h1>
+    <p class="text-gray-500 text-lg mb-8 max-w-xl mx-auto">
+      Post a listing, review applicants, and find proven mods for Discord, Reddit, forums, and more.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="/listings-new.html"
+        class="bg-sky-600 hover:bg-sky-700 text-white px-7 py-3 rounded-xl font-medium transition-colors text-base">
+        Create a Listing
+      </a>
+      <a href="/listings.html"
+        class="border border-gray-300 hover:border-sky-400 hover:text-sky-600 text-gray-700 px-7 py-3 rounded-xl font-medium transition-colors text-base">
+        Browse Listings
+      </a>
     </div>
   </section>
 
-  <section class="max-w-6xl mx-auto px-4 pb-20">
-    <h2 class="text-xl font-semibold text-gray-800 mb-6">Latest Job Listings</h2>
+  <!-- ── Latest listings ────────────────────────────────────────────────── -->
+  <section class="max-w-6xl mx-auto px-4 pb-16">
+    <h2 class="text-xl font-semibold text-gray-800 mb-6">Latest Listings</h2>
     <div id="listings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <p class="text-gray-400 text-sm">Loading…</p>
     </div>
@@ -38,19 +88,121 @@
     </div>
   </section>
 
-  <footer class="bg-white border-t border-gray-100 py-6 text-center text-xs text-gray-400">
-    Mods4Hire — connecting communities with quality moderators.
+  <!-- ── How It Works ───────────────────────────────────────────────────── -->
+  <section class="bg-white border-t border-b border-gray-100 py-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-3">How It Works</h2>
+      <p class="text-gray-500 text-center mb-12 max-w-xl mx-auto">
+        Finding the right moderator is straightforward. Here's the process from start to hire.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="w-12 h-12 bg-sky-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-sky-600 font-bold text-xl">1</span>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Create a Listing</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Describe the role — platform, community size, hours per week, and what you're looking for in a mod.
+          </p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 bg-sky-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-sky-600 font-bold text-xl">2</span>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Review Applicants</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Moderators apply with their experience and pitch. Review their profiles, ratings, and past engagement history.
+          </p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 bg-sky-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-sky-600 font-bold text-xl">3</span>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Hire Your Moderator</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Accept an applicant, agree on terms directly, and get your community moderated by someone you chose.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── About ──────────────────────────────────────────────────────────── -->
+  <section class="max-w-5xl mx-auto px-4 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+      <!-- Who Are We -->
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Who Are We</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          Mods4Hire is a marketplace purpose-built for online community management. We connect community owners, server admins, and platform operators with moderators who are actively looking for opportunities.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          We built this because hiring moderation help is fragmented — listings end up buried in Discord servers or community forums with no standard process for vetting candidates or establishing accountability.
+        </p>
+      </div>
+
+      <!-- What We Do -->
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">What We Do</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          We give hirers the tools to post structured listings with clear requirements — platform, community size, hours, and compensation — so moderators can find the right fit and apply with context.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          We give moderators a way to build a verifiable public track record through a rating system that only activates after a confirmed engagement — so reputation means something.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Platforms ──────────────────────────────────────────────────────── -->
+  <section class="bg-white border-t border-gray-100 py-14">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">Platforms We Support</h2>
+      <p class="text-gray-500 text-sm mb-8">Post listings and find moderators for any online community.</p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <span class="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium">Discord</span>
+        <span class="px-4 py-2 bg-orange-50 text-orange-700 rounded-full text-sm font-medium">Reddit</span>
+        <span class="px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm font-medium">Twitch</span>
+        <span class="px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">Forums</span>
+        <span class="px-4 py-2 bg-teal-50 text-teal-700 rounded-full text-sm font-medium">TeamSpeak</span>
+        <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm font-medium">Other</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer class="bg-white border-t border-gray-100 py-8">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <span class="text-sky-600 font-bold">Mods4Hire</span>
+      <div class="flex items-center gap-6 text-xs text-gray-400">
+        <a href="/listings.html" class="hover:text-gray-600 transition-colors">Browse Listings</a>
+        <a href="/moderators.html" class="hover:text-gray-600 transition-colors">Moderators</a>
+        <a href="/listings-new.html" class="hover:text-gray-600 transition-colors">Post a Listing</a>
+        <a href="/login.html" class="hover:text-gray-600 transition-colors">Sign In</a>
+      </div>
+      <p class="text-xs text-gray-400">© 2025 Mods4Hire. All rights reserved.</p>
+    </div>
   </footer>
 
   <script type="module">
     import { getListings, renderListingCard } from '/src/js/listings.js';
     import { updateNavAuth } from '/src/js/auth.js';
 
+    // Hamburger toggle
+    document.getElementById('menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
     updateNavAuth();
     getListings({ pageSize: 6 }).then(listings => {
       const grid = document.getElementById('listings-grid');
       grid.innerHTML = '';
-      if (!listings.length) { grid.innerHTML = '<p class="text-gray-400 text-sm">No listings yet.</p>'; return; }
+      if (!listings.length) {
+        grid.innerHTML = '<p class="text-gray-400 text-sm">No listings yet. <a href="/listings-new.html" class="text-sky-600 hover:underline">Be the first to post one.</a></p>';
+        return;
+      }
       listings.forEach(l => grid.appendChild(renderListingCard(l)));
     }).catch(console.error);
   </script>

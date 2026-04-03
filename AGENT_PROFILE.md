@@ -74,6 +74,9 @@ supabase functions deploy send-application-email
 supabase functions deploy update-rating-avg
 ```
 
+## Supabase Account
+This project uses the Supabase account tied to the **jordanaiz8 GitHub account** — NOT the jordanaiz@live.com account used for PlayerVotes and StewardTracker. Do NOT auto-connect or run `supabase login` for this project. Always provide manual instructions for Jordan to run himself.
+
 ## Environment Variables (Cloudflare Pages)
 ```
 SUPABASE_URL=

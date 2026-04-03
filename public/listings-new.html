@@ -3,19 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Post a Job — Mods4Hire</title>
+  <title>Create a Listing — Mods4Hire</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/src/css/styles.css" />
 </head>
 <body class="bg-gray-50 min-h-screen">
   <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-sky-600">Mods4Hire</a>
-      <div id="auth-links" class="flex items-center gap-4"></div>
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center justify-between h-14">
+        <a href="/" class="text-xl font-bold text-sky-600 shrink-0">Mods4Hire</a>
+        <div class="hidden md:flex items-center gap-6">
+          <a href="/listings.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Browse Listings</a>
+          <a href="/moderators.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Moderators</a>
+        </div>
+        <div class="hidden md:flex items-center gap-3">
+          <a href="/listings-new.html" class="bg-sky-600 text-white text-sm px-4 py-2 rounded-lg font-medium">+ Post a Listing</a>
+          <div id="auth-links" class="flex items-center gap-3"></div>
+        </div>
+        <div class="flex md:hidden items-center gap-2">
+          <a href="/listings-new.html" class="bg-sky-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium">Post</a>
+          <button id="menu-btn" aria-label="Open menu" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 py-3 space-y-0.5 pb-4">
+        <a href="/listings.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg">Browse Listings</a>
+        <a href="/moderators.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg">Moderators</a>
+        <div id="mobile-auth-links" class="pt-2 border-t border-gray-100 mt-2"></div>
+      </div>
     </div>
   </nav>
   <main class="max-w-2xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold text-gray-900 mb-8">Post a Mod Job</h1>
+    <h1 class="text-2xl font-bold text-gray-900 mb-8">Create a Listing</h1>
     <form id="new-listing-form" class="space-y-5">
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Job Title *</label>
@@ -55,7 +75,7 @@
         <input name="deadline" type="date" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
       </div>
       <p id="form-error" class="text-red-500 text-sm hidden"></p>
-      <button type="submit" id="submit-btn" class="w-full bg-sky-600 text-white py-3 rounded-lg font-medium hover:bg-sky-700 transition">Post Job</button>
+      <button type="submit" id="submit-btn" class="w-full bg-sky-600 text-white py-3 rounded-lg font-medium hover:bg-sky-700 transition">Post Listing</button>
     </form>
   </main>
   <script type="module">
@@ -63,6 +83,7 @@
     import { createListing } from '/src/js/listings.js';
     import { showToast, setLoading } from '/src/js/supabase.js';
 
+    document.getElementById('menu-btn')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
     updateNavAuth();
     const user = await requireAuth();
 
