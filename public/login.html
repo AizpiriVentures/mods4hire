@@ -62,8 +62,21 @@
       e.preventDefault();
       const btn = document.getElementById('reg-btn');
       const err = document.getElementById('reg-error');
+      const email = document.getElementById('reg-email').value;
       err.classList.add('hidden'); setLoading(btn, true);
-      try { await signUp(document.getElementById('reg-email').value, document.getElementById('reg-password').value, document.getElementById('reg-username').value, document.getElementById('reg-role').value); window.location.href = '/dashboard.html'; }
+      try {
+        const data = await signUp(email, document.getElementById('reg-password').value, document.getElementById('reg-username').value, document.getElementById('reg-role').value);
+        if (data.session) {
+          window.location.href = '/dashboard.html';
+        } else {
+          document.getElementById('register-form').innerHTML = `
+            <div class="text-center py-6">
+              <div class="text-4xl mb-3">📧</div>
+              <h3 class="font-bold text-gray-900 text-lg mb-2">Check your email</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">We sent a confirmation link to <strong class="text-gray-700">${email}</strong>.<br>Click it to activate your account, then log in.</p>
+            </div>`;
+        }
+      }
       catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); }
       finally { setLoading(btn, false); }
     });
