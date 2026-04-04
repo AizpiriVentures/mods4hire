@@ -25,7 +25,7 @@ export async function signUp(email, password, username, role) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { username, role } }
+    options: { data: { username, role }, emailRedirectTo: window.location.origin + '/login.html' }
   });
   if (error) throw error;
   return data;
