@@ -123,13 +123,18 @@
       const err = document.getElementById('contact-error');
       err.classList.add('hidden');
       btn.disabled = true; btn.textContent = 'Sending…';
-      const fd = new FormData(contactForm);
-      fd.set('subject', `Mods4Hire — ${fd.get('subject_line')}`);
       try {
-        const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
-        const json = await res.json();
-        if (json.success) { contactForm.classList.add('hidden'); contactSuccess.classList.remove('hidden'); }
-        else { err.textContent = json.message || 'Something went wrong.'; err.classList.remove('hidden'); }
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: contactForm.querySelector('[name="name"]').value,
+            email: contactForm.querySelector('[name="email"]').value,
+            message: `Subject: ${contactForm.querySelector('[name="subject_line"]').value}\n\n${msgArea.value}`
+          })
+        });
+        if (res.ok) { contactForm.classList.add('hidden'); contactSuccess.classList.remove('hidden'); }
+        else { err.textContent = 'Something went wrong. Please try again.'; err.classList.remove('hidden'); }
       } catch { err.textContent = 'Network error. Please try again.'; err.classList.remove('hidden'); }
       finally { btn.disabled = false; btn.textContent = 'Send Message'; }
     });
