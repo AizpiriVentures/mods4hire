@@ -81,6 +81,8 @@ export async function updateNavAuth() {
     const adminLink = profile?.is_admin ? `<a href="/admin.html" class="text-sm text-purple-600 hover:underline font-semibold transition-colors">Admin</a>` : '';
     el.innerHTML = `<span class="text-sm font-semibold text-gray-800">${name}</span>
       ${adminLink}
+      <a href="/moderator.html?id=${user.id}" class="text-sm text-sky-600 hover:underline transition-colors">My Profile</a>
+      <a href="/profile.html" class="text-sm text-sky-600 hover:underline transition-colors">Edit Profile</a>
       <a href="/dashboard.html" class="text-sm text-sky-600 hover:underline transition-colors">Dashboard</a>
       <button id="sign-out-btn" class="text-sm text-red-500 hover:text-red-700">Sign Out</button>`;
     document.getElementById('sign-out-btn')?.addEventListener('click', signOut);
