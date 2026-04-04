@@ -114,7 +114,7 @@
               <span class="text-xs px-2 py-0.5 rounded-full shrink-0 ${STATUS_BADGE[app.status] || ''}">${app.status}</span>
             </div>
             ${app.pitch ? `<p class="text-sm text-gray-600 leading-relaxed mb-4">${escapeHtml(app.pitch)}</p>` : '<p class="text-gray-400 text-sm italic mb-4">No pitch provided.</p>'}
-            <div class="flex gap-2">
+            <div class="flex gap-2 flex-wrap">
               <button data-appid="${app.id}" data-action="accepted"
                 class="action-btn text-xs px-3 py-1.5 rounded-lg border ${app.status === 'accepted' ? 'bg-green-600 text-white border-green-600' : 'border-green-300 text-green-700 hover:bg-green-50'} transition-colors">
                 Accept
@@ -123,6 +123,7 @@
                 class="action-btn text-xs px-3 py-1.5 rounded-lg border ${app.status === 'rejected' ? 'bg-gray-400 text-white border-gray-400' : 'border-gray-300 text-gray-500 hover:bg-gray-100'} transition-colors">
                 Reject
               </button>
+              ${app.status === 'accepted' ? `<a href="/rate.html?listing=${id}&ratee=${app.profiles?.id}" class="text-xs px-3 py-1.5 rounded-lg border border-yellow-300 text-yellow-700 hover:bg-yellow-50 transition-colors">⭐ Rate</a>` : ''}
             </div>
           `;
           listEl.appendChild(div);
