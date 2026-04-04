@@ -70,7 +70,7 @@
         ${listing.community_type ? `<p><span class="text-gray-400">Community type:</span> ${escapeHtml(listing.community_type)}</p>` : ''}
         ${listing.required_skills ? `<p><span class="text-gray-400">Required skills:</span> ${escapeHtml(listing.required_skills)}</p>` : ''}
         ${listing.deadline ? `<p><span class="text-gray-400">Deadline:</span> ${new Date(listing.deadline).toLocaleDateString()}</p>` : ''}
-        <p><span class="text-gray-400">Posted by:</span> ${escapeHtml(listing.profiles?.username)}</p>
+        <p><span class="text-gray-400">Posted by:</span> ${escapeHtml(listing.profiles?.username)}${user && user.id !== listing.hirer_id ? ` <a href="/rate.html?ratee=${listing.hirer_id}" class="ml-2 text-xs text-yellow-600 border border-yellow-300 px-2 py-0.5 rounded hover:bg-yellow-50">⭐ Rate</a>` : ''}</p>
       </div>
     `;
     if (user && user.id === listing.hirer_id) {
@@ -123,7 +123,6 @@
                 class="action-btn text-xs px-3 py-1.5 rounded-lg border ${app.status === 'rejected' ? 'bg-gray-400 text-white border-gray-400' : 'border-gray-300 text-gray-500 hover:bg-gray-100'} transition-colors">
                 Reject
               </button>
-              ${app.status === 'accepted' ? `<a href="/rate.html?listing=${id}&ratee=${app.profiles?.id}" class="text-xs px-3 py-1.5 rounded-lg border border-yellow-300 text-yellow-700 hover:bg-yellow-50 transition-colors">⭐ Rate</a>` : ''}
             </div>
           `;
           listEl.appendChild(div);

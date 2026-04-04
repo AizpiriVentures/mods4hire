@@ -1,10 +1,9 @@
-// Mods4Hire — Ratings (only unlocked after confirmed engagement — enforced by DB policy)
+// Mods4Hire — Ratings
 import { supabase } from './supabase.js';
 
-export async function submitRating({ rateeId, listingId, reliability, communication, judgment, professionalism, comment }) {
+export async function submitRating({ rateeId, reliability, communication, judgment, professionalism, comment }) {
   const { data, error } = await supabase.from('ratings').insert({
     ratee_id: rateeId,
-    listing_id: listingId,
     reliability,
     communication,
     judgment,

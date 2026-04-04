@@ -106,12 +106,8 @@
     const user = await requireAuth();
 
     const params = new URLSearchParams(location.search);
-    const listingId = params.get('listing');
-    const rateeId   = params.get('ratee');
-
-    if (!listingId || !rateeId) {
-      window.location.href = '/dashboard.html';
-    }
+    const rateeId = params.get('ratee');
+    if (!rateeId) window.location.href = '/dashboard.html';
 
     // Load ratee username
     const { data: ratee } = await supabase
@@ -126,7 +122,6 @@
       .select('id')
       .eq('rater_id', user.id)
       .eq('ratee_id', rateeId)
-      .eq('listing_id', listingId)
       .maybeSingle();
 
     document.getElementById('loading').classList.add('hidden');
@@ -149,7 +144,6 @@
       try {
         await submitRating({
           rateeId,
-          listingId,
           reliability:     parseInt(fd.get('reliability')),
           communication:   parseInt(fd.get('communication')),
           judgment:        parseInt(fd.get('judgment')),

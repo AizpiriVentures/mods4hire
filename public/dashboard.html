@@ -83,18 +83,15 @@
       btn.closest('div').remove();
     });
 
-    const { data: apps } = await supabase.from('applications').select('id,status,job_listings(id,title,hirer_id)').order('applied_at', { ascending: false });
+    const { data: apps } = await supabase.from('applications').select('id,status,job_listings(id,title)').order('applied_at', { ascending: false });
     const aEl = document.getElementById('my-apps');
     aEl.innerHTML = '';
     if (!apps?.length) aEl.innerHTML = '<p class="text-gray-400 text-sm">No applications yet.</p>';
     else apps.forEach(a => {
       const STATUS = { pending: 'text-yellow-600', accepted: 'text-green-600', rejected: 'text-red-500' };
       const div = document.createElement('div');
-      div.className = 'bg-white border border-gray-200 rounded-xl p-4 mb-3 flex items-center justify-between gap-3';
-      const rateBtn = a.status === 'accepted'
-        ? `<a href="/rate.html?listing=${a.job_listings?.id}&ratee=${a.job_listings?.hirer_id}" class="text-xs px-3 py-1 rounded-lg border border-yellow-300 text-yellow-700 hover:bg-yellow-50 shrink-0">⭐ Rate</a>`
-        : '';
-      div.innerHTML = `<a href="/listing.html?id=${a.job_listings?.id}" class="font-medium text-gray-800 hover:text-sky-600 flex-1 min-w-0 truncate">${escapeHtml(a.job_listings?.title||'—')}</a><span class="text-xs ${STATUS[a.status]||''} shrink-0">${a.status}</span>${rateBtn}`;
+      div.className = 'bg-white border border-gray-200 rounded-xl p-4 mb-3 flex items-center justify-between';
+      div.innerHTML = `<a href="/listing.html?id=${a.job_listings?.id}" class="font-medium text-gray-800 hover:text-sky-600">${escapeHtml(a.job_listings?.title||'—')}</a><span class="text-xs ${STATUS[a.status]||''}">${a.status}</span>`;
       aEl.appendChild(div);
     });
   </script>

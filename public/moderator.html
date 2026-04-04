@@ -34,7 +34,7 @@
   });
 </script>
   <script type="module">
-    import { updateNavAuth } from '/src/js/auth.js';
+    import { getUser, updateNavAuth } from '/src/js/auth.js';
     import { supabase, escapeHtml } from '/src/js/supabase.js';
     import { getRatingsForUser } from '/src/js/ratings.js';
 
@@ -42,10 +42,19 @@
     const id = new URLSearchParams(location.search).get('id');
     if (!id) window.location.href = '/moderators.html';
 
-    const { data: profile } = await supabase.from('profiles').select('*, moderator_profiles(*)').eq('id', id).single();
+    const [{ data: profile }, user] = await Promise.all([
+      supabase.from('profiles').select('*, moderator_profiles(*)').eq('id', id).single(),
+      getUser(),
+    ]);
+    const canRate = user && user.id !== id;
     document.getElementById('mod-profile').innerHTML = `
-      <h1 class="text-2xl font-bold text-gray-900">${escapeHtml(profile.username)}</h1>
-      <p class="text-yellow-500">⭐ ${profile.rating_avg} <span class="text-gray-400 text-sm">(${profile.rating_count} ratings)</span></p>
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">${escapeHtml(profile.username)}</h1>
+          <p class="text-yellow-500">⭐ ${profile.rating_avg} <span class="text-gray-400 text-sm">(${profile.rating_count} ratings)</span></p>
+        </div>
+        ${canRate ? `<a href="/rate.html?ratee=${id}" class="shrink-0 text-sm px-4 py-2 rounded-lg border border-yellow-300 text-yellow-700 hover:bg-yellow-50 transition-colors">⭐ Rate this Moderator</a>` : ''}
+      </div>
       ${profile.bio ? `<p class="mt-3 text-gray-600">${escapeHtml(profile.bio)}</p>` : ''}
       <div class="mt-4 bg-white rounded-xl border border-gray-200 p-5 space-y-2 text-sm">
         ${profile.moderator_profiles?.hours_per_week ? `<p><span class="text-gray-400">Availability:</span> ${profile.moderator_profiles.hours_per_week} hrs/week</p>` : ''}
