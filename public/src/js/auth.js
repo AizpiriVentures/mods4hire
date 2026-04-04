@@ -12,10 +12,24 @@ export async function requireAuth() {
   return user;
 }
 
+export async function requireAdmin() {
+  const user = await getUser();
+  if (!user) { window.location.href = '/login.html'; return null; }
+  const admin = await isAdmin();
+  if (!admin) { window.location.href = '/dashboard.html'; return null; }
+  return user;
+}
+
+export async function isAdmin() {
+  const user = await getUser();
+  if (!user) return false;
+  const { data } = await supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle();
+  return data?.is_admin === true;
+}
+
 export async function signIn(email, password) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
-  // Ensure this user has an account on this specific site
   const { data: profile } = await supabase.from('profiles').select('id').eq('id', data.user.id).maybeSingle();
   if (!profile) {
     await supabase.auth.signOut();
@@ -40,7 +54,14 @@ export async function signUp(email, password, username, role) {
 export async function signInWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin + '/dashboard.html' }
+    options: { redirectTo: window.location.origin + '/auth/callback.html' }
+  });
+  if (error) throw error;
+}
+
+export async function resetPasswordForEmail(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/reset-password.html'
   });
   if (error) throw error;
 }
@@ -55,9 +76,11 @@ export async function updateNavAuth() {
   const el = document.getElementById('auth-links');
   if (!el) return;
   if (user) {
-    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).maybeSingle();
+    const { data: profile } = await supabase.from('profiles').select('username, is_admin').eq('id', user.id).maybeSingle();
     const name = (profile?.username || user.email?.split('@')[0] || 'Account').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const adminLink = profile?.is_admin ? `<a href="/admin.html" class="text-sm text-purple-600 hover:underline font-semibold transition-colors">Admin</a>` : '';
     el.innerHTML = `<span class="text-sm font-semibold text-gray-800">${name}</span>
+      ${adminLink}
       <a href="/dashboard.html" class="text-sm text-sky-600 hover:underline transition-colors">Dashboard</a>
       <button id="sign-out-btn" class="text-sm text-red-500 hover:text-red-700">Sign Out</button>`;
     document.getElementById('sign-out-btn')?.addEventListener('click', signOut);

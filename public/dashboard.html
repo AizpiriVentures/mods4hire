@@ -68,9 +68,18 @@
     if (!listings?.length) lEl.innerHTML = '<p class="text-gray-400 text-sm">No listings yet.</p>';
     else listings.forEach(l => {
       const div = document.createElement('div');
-      div.className = 'bg-white border border-gray-200 rounded-xl p-4 mb-3 flex items-center justify-between';
-      div.innerHTML = `<a href="/listing.html?id=${l.id}" class="font-medium text-gray-800 hover:text-sky-600">${escapeHtml(l.title)}</a><span class="text-xs text-gray-400">${l.status}</span>`;
+      div.className = 'bg-white border border-gray-200 rounded-xl p-4 mb-3 flex items-center justify-between gap-3';
+      div.innerHTML = `<a href="/listing.html?id=${l.id}" class="font-medium text-gray-800 hover:text-sky-600 flex-1 min-w-0 truncate">${escapeHtml(l.title)}</a><span class="text-xs text-gray-400 shrink-0">${l.status}</span><a href="/listings-edit.html?id=${l.id}" class="text-xs text-sky-500 hover:text-sky-700 shrink-0">Edit</a><button data-id="${l.id}" class="del-listing text-xs text-red-400 hover:text-red-600 shrink-0">Delete</button>`;
       lEl.appendChild(div);
+    });
+    lEl.addEventListener('click', async e => {
+      const btn = e.target.closest('.del-listing');
+      if (!btn) return;
+      if (!confirm('Delete this listing? This cannot be undone.')) return;
+      const { data: deleted, error } = await supabase.from('job_listings').delete().eq('id', btn.dataset.id).select();
+      if (error) { alert(error.message); return; }
+      if (!deleted?.length) { alert('Delete failed — please refresh and try again.'); return; }
+      btn.closest('div').remove();
     });
 
     const { data: apps } = await supabase.from('applications').select('id,status,job_listings(id,title)').order('applied_at', { ascending: false });

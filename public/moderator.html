@@ -50,7 +50,7 @@
       <div class="mt-4 bg-white rounded-xl border border-gray-200 p-5 space-y-2 text-sm">
         ${profile.moderator_profiles?.hours_per_week ? `<p><span class="text-gray-400">Availability:</span> ${profile.moderator_profiles.hours_per_week} hrs/week</p>` : ''}
         ${(profile.moderator_profiles?.platforms||[]).length ? `<p><span class="text-gray-400">Platforms:</span> ${(profile.moderator_profiles.platforms||[]).map(p=>escapeHtml(p)).join(', ')}</p>` : ''}
-        ${profile.moderator_profiles?.portfolio_url ? `<p><a href="${escapeHtml(profile.moderator_profiles.portfolio_url)}" target="_blank" rel="noopener" class="text-sky-600 hover:underline">View Portfolio</a></p>` : ''}
+        ${(() => { try { const u = new URL(profile.moderator_profiles?.portfolio_url || ''); return (u.protocol === 'https:' || u.protocol === 'http:') ? `<p><a href="${escapeHtml(u.href)}" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">View Portfolio</a></p>` : ''; } catch { return ''; } })()}
       </div>
     `;
 

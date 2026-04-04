@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Mods4Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center justify-between h-14">
+        <div class="flex items-center gap-3">
+          <a href="/" class="text-xl font-bold text-sky-600">Mods4Hire</a>
+          <span class="text-xs font-bold uppercase tracking-widest text-purple-600 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">Admin</span>
+        </div>
+        <div id="auth-links" class="flex items-center gap-4"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
+
+    <!-- Tabs -->
+    <div class="flex gap-1 mb-6 border-b border-gray-200">
+      <button data-tab="listings" class="tab-btn px-4 py-2 text-sm font-medium text-sky-600 border-b-2 border-sky-600 -mb-px">Listings</button>
+      <button data-tab="users" class="tab-btn px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent -mb-px">Users</button>
+    </div>
+
+    <!-- Listings tab -->
+    <div id="tab-listings">
+      <div class="flex items-center justify-between mb-4">
+        <input id="search-listings" type="text" placeholder="Search listings…" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 w-64" />
+        <a href="/listings-new.html" class="text-sm bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700">+ New Listing</a>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="text-left px-4 py-3 font-semibold text-gray-600">Title</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-600">Hirer</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-600">Status</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-600">Created</th>
+              <th class="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody id="listings-tbody">
+            <tr><td colspan="5" class="px-4 py-6 text-gray-400 text-center">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Users tab -->
+    <div id="tab-users" class="hidden">
+      <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="text-left px-4 py-3 font-semibold text-gray-600">Display Name</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-600">Role</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-600">Admin</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-600">Joined</th>
+              <th class="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="5" class="px-4 py-6 text-gray-400 text-center">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.className = 'tab-btn px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent -mb-px';
+        });
+        btn.className = 'tab-btn px-4 py-2 text-sm font-medium text-sky-600 border-b-2 border-sky-600 -mb-px';
+        document.getElementById('tab-listings').classList.toggle('hidden', btn.dataset.tab !== 'listings');
+        document.getElementById('tab-users').classList.toggle('hidden', btn.dataset.tab !== 'users');
+      });
+    });
+  </script>
+
+  <script type="module">
+    import { requireAdmin, updateNavAuth } from '/src/js/auth.js';
+    import { supabase, escapeHtml } from '/src/js/supabase.js';
+
+    updateNavAuth();
+    await requireAdmin();
+
+    // ── Load listings ──────────────────────────────────────────────────────
+    async function loadListings(search = '') {
+      let q = supabase.from('job_listings')
+        .select('id,title,status,created_at,profiles:hirer_id(username)')
+        .order('created_at', { ascending: false })
+        .limit(200);
+      if (search) q = q.ilike('title', `%${search}%`);
+      const { data, error } = await q;
+      const tbody = document.getElementById('listings-tbody');
+      if (error || !data?.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-gray-400 text-center">${error ? error.message : 'No listings found.'}</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.map(l => `
+        <tr class="border-t border-gray-100 hover:bg-gray-50" data-id="${l.id}">
+          <td class="px-4 py-3"><a href="/listing.html?id=${l.id}" class="text-sky-600 hover:underline font-medium">${escapeHtml(l.title)}</a></td>
+          <td class="px-4 py-3 text-gray-500">${escapeHtml(l.profiles?.username || '—')}</td>
+          <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full ${l.status === 'open' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">${l.status}</span></td>
+          <td class="px-4 py-3 text-gray-400 text-xs">${new Date(l.created_at).toLocaleDateString()}</td>
+          <td class="px-4 py-3 text-right"><button class="del-listing text-xs text-red-400 hover:text-red-600">Delete</button></td>
+        </tr>`).join('');
+    }
+
+    loadListings();
+    let searchTimer;
+    document.getElementById('search-listings').addEventListener('input', e => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => loadListings(e.target.value), 300);
+    });
+
+    document.getElementById('listings-tbody').addEventListener('click', async e => {
+      if (!e.target.classList.contains('del-listing')) return;
+      const row = e.target.closest('tr');
+      if (!confirm('Delete this listing permanently?')) return;
+      const { error } = await supabase.from('job_listings').delete().eq('id', row.dataset.id);
+      if (error) { alert(error.message); return; }
+      row.remove();
+    });
+
+    // ── Load users ─────────────────────────────────────────────────────────
+    async function loadUsers() {
+      const { data, error } = await supabase.from('profiles')
+        .select('id,username,role,is_admin,created_at')
+        .order('created_at', { ascending: false })
+        .limit(500);
+      const tbody = document.getElementById('users-tbody');
+      if (error || !data?.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-gray-400 text-center">${error ? error.message : 'No users.'}</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.map(u => `
+        <tr class="border-t border-gray-100 hover:bg-gray-50" data-id="${u.id}">
+          <td class="px-4 py-3 font-medium text-gray-800">${escapeHtml(u.username)}</td>
+          <td class="px-4 py-3 text-gray-500 text-xs">${u.role}</td>
+          <td class="px-4 py-3">
+            <button class="toggle-admin text-xs px-2 py-0.5 rounded-full border ${u.is_admin ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-gray-100 text-gray-500 border-gray-200'}" data-admin="${u.is_admin}">
+              ${u.is_admin ? 'Admin ✓' : 'Make Admin'}
+            </button>
+          </td>
+          <td class="px-4 py-3 text-gray-400 text-xs">${new Date(u.created_at).toLocaleDateString()}</td>
+          <td class="px-4 py-3 text-right"><button class="del-user text-xs text-red-400 hover:text-red-600">Remove</button></td>
+        </tr>`).join('');
+    }
+
+    document.querySelector('[data-tab="users"]').addEventListener('click', loadUsers);
+
+    document.getElementById('users-tbody').addEventListener('click', async e => {
+      const row = e.target.closest('tr');
+      if (e.target.classList.contains('toggle-admin')) {
+        const newVal = e.target.dataset.admin !== 'true';
+        const { error } = await supabase.from('profiles').update({ is_admin: newVal }).eq('id', row.dataset.id);
+        if (error) { alert(error.message); return; }
+        e.target.dataset.admin = newVal;
+        e.target.textContent = newVal ? 'Admin ✓' : 'Make Admin';
+        e.target.className = `toggle-admin text-xs px-2 py-0.5 rounded-full border ${newVal ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-gray-100 text-gray-500 border-gray-200'}`;
+      }
+      if (e.target.classList.contains('del-user')) {
+        if (!confirm('Remove this user profile? This cannot be undone.')) return;
+        const { error } = await supabase.from('profiles').delete().eq('id', row.dataset.id);
+        if (error) { alert(error.message); return; }
+        row.remove();
+      }
+    });
+  </script>
+</body>
+</html>

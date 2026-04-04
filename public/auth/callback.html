@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signing in… — Mods4Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+  <div class="text-center">
+    <p class="text-gray-500 text-sm">Signing you in…</p>
+  </div>
+  <script type="module">
+    import { supabase } from '/src/js/supabase.js';
+
+    // Supabase v2 automatically exchanges the OAuth code when the client
+    // initialises and detects ?code= in the URL. We just wait for the session.
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      window.location.replace('/dashboard.html');
+    } else {
+      // Listen for the exchange to complete (async PKCE flow)
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          window.location.replace('/dashboard.html');
+        }
+      });
+      // Safety timeout — if nothing happens in 5s, send to login
+      setTimeout(() => { window.location.replace('/login.html'); }, 5000);
+    }
+  </script>
+</body>
+</html>

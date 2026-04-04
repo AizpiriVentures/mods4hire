@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Listing — Mods4Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center justify-between h-14">
+        <a href="/" class="text-xl font-bold text-sky-600 shrink-0">Mods4Hire</a>
+        <div class="hidden md:flex items-center gap-6">
+          <a href="/listings.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Browse Listings</a>
+          <a href="/moderators.html" class="text-sm text-gray-600 hover:text-sky-600 transition-colors">Moderators</a>
+        </div>
+        <div class="hidden md:flex items-center gap-6">
+          <div id="auth-links" class="flex items-center gap-6"></div>
+        </div>
+        <div class="flex md:hidden items-center gap-2">
+          <button id="menu-btn" aria-label="Open menu" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 py-3 space-y-0.5 pb-4">
+        <a href="/listings.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg">Browse Listings</a>
+        <a href="/moderators.html" class="block px-3 py-2.5 text-sm text-gray-700 hover:text-sky-600 hover:bg-gray-50 rounded-lg">Moderators</a>
+        <div id="mobile-auth-links" class="pt-2 border-t border-gray-100 mt-2"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-2xl mx-auto px-4 py-10">
+    <div class="flex items-center gap-3 mb-8">
+      <a id="back-link" href="/dashboard.html" class="text-sky-600 text-sm hover:underline">← Back</a>
+      <h1 class="text-2xl font-bold text-gray-900">Edit Listing</h1>
+    </div>
+
+    <div id="loading" class="text-gray-400 text-sm">Loading…</div>
+
+    <form id="edit-form" class="space-y-5 hidden">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Job Title *</label>
+        <input id="title" name="title" type="text" required maxlength="120"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Platforms</label>
+        <div class="flex flex-wrap gap-3">
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Discord" class="rounded" /> Discord</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="TeamSpeak" class="rounded" /> TeamSpeak</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Reddit" class="rounded" /> Reddit</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Twitch" class="rounded" /> Twitch</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Games" class="rounded" /> Gaming</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Forum" class="rounded" /> Forum</label>
+          <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="platform" value="Other" class="rounded" /> Other</label>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Compensation *</label>
+          <select id="compensation_type" name="compensation_type" required
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
+            <option value="paid_hourly">Hourly</option>
+            <option value="monthly_retainer">Monthly Retainer</option>
+            <option value="salary">Salary</option>
+            <option value="volunteer">Volunteer Mods</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Hours/week</label>
+          <input id="hours_per_week" name="hours_per_week" type="number" min="1" max="168"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+        <select id="status" name="status"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
+          <option value="open">Open — accepting applications</option>
+          <option value="closed">Closed — no longer accepting</option>
+          <option value="filled">Filled — position taken</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Required Skills</label>
+        <textarea id="required_skills" name="required_skills" rows="2" maxlength="500"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Application Deadline</label>
+        <input id="deadline" name="deadline" type="date"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+      </div>
+
+      <!-- Role Details -->
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <button type="button" id="toggle-role"
+          class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left">
+          <span class="text-sm font-medium text-gray-700">Role Details <span class="text-gray-400 font-normal">(optional)</span></span>
+          <svg id="toggle-role-icon" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div id="role-details" class="hidden px-4 py-4 space-y-4 border-t border-gray-200">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Community Size</label>
+            <select id="community_size" name="community_size" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
+              <option value="">Not specified</option>
+              <option value="small">Small (under 1,000 members)</option>
+              <option value="medium">Medium (1,000 – 10,000 members)</option>
+              <option value="large">Large (10,000 – 100,000 members)</option>
+              <option value="xlarge">Extra Large (100,000+ members)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Experience Level Required</label>
+            <select id="experience_level" name="experience_level" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
+              <option value="">Any experience</option>
+              <option value="beginner">Beginner — willing to train</option>
+              <option value="intermediate">Intermediate — some prior mod experience</option>
+              <option value="experienced">Experienced — proven moderation track record</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Responsibilities</label>
+            <textarea id="responsibilities" name="responsibilities" rows="3" maxlength="1000"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Time Zone Preference</label>
+            <input id="timezone_pref" name="timezone_pref" type="text" maxlength="100" placeholder="e.g. UTC, EST, flexible"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Notes -->
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <button type="button" id="toggle-notes"
+          class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left">
+          <span class="text-sm font-medium text-gray-700">Additional Notes <span class="text-gray-400 font-normal">(optional)</span></span>
+          <svg id="toggle-notes-icon" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div id="notes-details" class="hidden px-4 py-4 border-t border-gray-200">
+          <textarea id="additional_notes" name="additional_notes" rows="4" maxlength="1500"
+            placeholder="Anything else applicants should know…"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none"></textarea>
+        </div>
+      </div>
+
+      <p id="form-error" class="text-red-500 text-sm hidden"></p>
+      <div class="flex gap-3">
+        <button type="submit" id="save-btn"
+          class="flex-1 bg-sky-600 text-white py-3 rounded-lg font-medium hover:bg-sky-700 transition-colors">
+          Save Changes
+        </button>
+        <a id="view-link" href="#"
+          class="px-5 py-3 border border-gray-300 rounded-lg text-sm text-gray-600 hover:border-gray-400 transition-colors text-center">
+          View Listing
+        </a>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    document.getElementById('menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+  <script type="module">
+    import { requireAuth, updateNavAuth } from '/src/js/auth.js';
+    import { supabase, showToast, setLoading } from '/src/js/supabase.js';
+
+    updateNavAuth();
+    const user = await requireAuth();
+
+    const id = new URLSearchParams(location.search).get('id');
+    if (!id) { window.location.href = '/dashboard.html'; }
+
+    // ── Load listing ────────────────────────────────────────────────────────
+    const { data: listing, error } = await supabase
+      .from('job_listings')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !listing) { window.location.href = '/dashboard.html'; }
+    if (listing.hirer_id !== user.id) { window.location.href = `/listing.html?id=${id}`; }
+
+    document.title = `Edit: ${listing.title} — Mods4Hire`;
+    document.getElementById('back-link').href = `/listing.html?id=${id}`;
+    document.getElementById('view-link').href = `/listing.html?id=${id}`;
+    document.getElementById('loading').classList.add('hidden');
+
+    // Pre-fill form
+    document.getElementById('title').value = listing.title || '';
+    document.getElementById('compensation_type').value = listing.compensation_type || 'paid_hourly';
+    document.getElementById('status').value = listing.status || 'open';
+    if (listing.hours_per_week) document.getElementById('hours_per_week').value = listing.hours_per_week;
+    if (listing.required_skills) document.getElementById('required_skills').value = listing.required_skills;
+    if (listing.deadline) document.getElementById('deadline').value = listing.deadline;
+    if (listing.community_size) document.getElementById('community_size').value = listing.community_size;
+    if (listing.experience_level) document.getElementById('experience_level').value = listing.experience_level;
+    if (listing.responsibilities) document.getElementById('responsibilities').value = listing.responsibilities;
+    if (listing.timezone_pref) document.getElementById('timezone_pref').value = listing.timezone_pref;
+    if (listing.additional_notes) document.getElementById('additional_notes').value = listing.additional_notes;
+
+    (listing.platform || []).forEach(p => {
+      const cb = document.querySelector(`[name="platform"][value="${p}"]`);
+      if (cb) cb.checked = true;
+    });
+
+    // Auto-expand sections that have data
+    if (listing.community_size || listing.experience_level || listing.responsibilities || listing.timezone_pref) {
+      document.getElementById('role-details').classList.remove('hidden');
+      document.getElementById('toggle-role-icon').style.transform = 'rotate(180deg)';
+    }
+    if (listing.additional_notes) {
+      document.getElementById('notes-details').classList.remove('hidden');
+      document.getElementById('toggle-notes-icon').style.transform = 'rotate(180deg)';
+    }
+
+    document.getElementById('edit-form').classList.remove('hidden');
+
+    // Expand/collapse toggles
+    function setupToggle(btnId, panelId, iconId) {
+      document.getElementById(btnId).addEventListener('click', () => {
+        const panel = document.getElementById(panelId);
+        const icon = document.getElementById(iconId);
+        panel.classList.toggle('hidden');
+        icon.style.transform = panel.classList.contains('hidden') ? '' : 'rotate(180deg)';
+      });
+    }
+    setupToggle('toggle-role', 'role-details', 'toggle-role-icon');
+    setupToggle('toggle-notes', 'notes-details', 'toggle-notes-icon');
+
+    // ── Save ────────────────────────────────────────────────────────────────
+    document.getElementById('edit-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('save-btn');
+      const err = document.getElementById('form-error');
+      err.classList.add('hidden');
+      setLoading(btn, true);
+      try {
+        const fd = new FormData(e.target);
+        const { data: updated, error: upErr } = await supabase.from('job_listings').update({
+          title:             fd.get('title'),
+          platform:          fd.getAll('platform'),
+          compensation_type: fd.get('compensation_type'),
+          status:            fd.get('status'),
+          hours_per_week:    fd.get('hours_per_week') ? parseInt(fd.get('hours_per_week')) : null,
+          required_skills:   fd.get('required_skills') || null,
+          deadline:          fd.get('deadline') || null,
+          community_size:    fd.get('community_size') || null,
+          experience_level:  fd.get('experience_level') || null,
+          responsibilities:  fd.get('responsibilities') || null,
+          timezone_pref:     fd.get('timezone_pref') || null,
+          additional_notes:  fd.get('additional_notes') || null,
+        }).eq('id', id).select();
+        if (upErr) throw upErr;
+        if (!updated?.length) throw new Error('Save failed — you may not have permission to edit this listing.');
+        showToast('Listing updated!');
+        window.location.href = `/listing.html?id=${id}`;
+      } catch (ex) {
+        err.textContent = ex.message;
+        err.classList.remove('hidden');
+      } finally {
+        setLoading(btn, false);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -25,12 +25,20 @@
   </nav>
   <main class="max-w-3xl mx-auto px-4 py-10">
     <div id="listing-detail"><p class="text-gray-400">Loading…</p></div>
+
+    <!-- Apply section (visible to non-hirers) -->
     <div id="apply-section" class="mt-8 hidden">
       <h2 class="text-lg font-semibold text-gray-800 mb-3">Apply</h2>
       <textarea id="pitch" rows="4" maxlength="1000" placeholder="Tell the hirer about your moderation experience…"
         class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
       <button id="apply-btn" class="mt-3 bg-sky-600 hover:bg-sky-700 text-white px-6 py-2 rounded-lg font-medium transition">Apply</button>
       <p id="apply-error" class="text-red-500 text-sm mt-2 hidden"></p>
+    </div>
+
+    <!-- Applicants section (visible to the hirer only) -->
+    <div id="applicants-section" class="mt-10 hidden">
+      <h2 class="text-lg font-semibold text-gray-800 mb-4">Applicants</h2>
+      <div id="applicants-list"><p class="text-gray-400 text-sm">Loading applicants…</p></div>
     </div>
   </main>
   <script>
@@ -42,7 +50,7 @@
     import { getListing } from '/src/js/listings.js';
     import { applyToListing } from '/src/js/applications.js';
     import { getUser, updateNavAuth } from '/src/js/auth.js';
-    import { escapeHtml, showToast, setLoading } from '/src/js/supabase.js';
+    import { supabase, escapeHtml, showToast, setLoading } from '/src/js/supabase.js';
 
     updateNavAuth();
     const id = new URLSearchParams(location.search).get('id');
@@ -65,7 +73,92 @@
         <p><span class="text-gray-400">Posted by:</span> ${escapeHtml(listing.profiles?.username)}</p>
       </div>
     `;
-    if (user && user.id !== listing.hirer_id) {
+    if (user && user.id === listing.hirer_id) {
+      // ── Hirer view: add edit button to listing detail ───────────────────
+      const detailEl = document.getElementById('listing-detail');
+      const editBtn = document.createElement('a');
+      editBtn.href = `/listings-edit.html?id=${id}`;
+      editBtn.className = 'inline-block mt-4 text-sm text-sky-600 border border-sky-300 hover:bg-sky-50 px-4 py-1.5 rounded-lg transition-colors';
+      editBtn.textContent = 'Edit Listing';
+      detailEl.appendChild(editBtn);
+
+      // ── Hirer view: show applicants ─────────────────────────────────────
+      document.getElementById('applicants-section').classList.remove('hidden');
+
+      const { data: apps, error: appsErr } = await supabase
+        .from('applications')
+        .select('id, pitch, status, applied_at, profiles:applicant_id(id, username, rating_avg, rating_count)')
+        .eq('listing_id', id)
+        .order('applied_at', { ascending: true });
+
+      const listEl = document.getElementById('applicants-list');
+      if (appsErr || !apps?.length) {
+        listEl.innerHTML = '<p class="text-gray-400 text-sm">No applicants yet.</p>';
+      } else {
+        listEl.innerHTML = '';
+        apps.forEach(app => {
+          const STATUS_BADGE = {
+            pending:  'bg-yellow-50 text-yellow-700',
+            accepted: 'bg-green-50 text-green-700',
+            rejected: 'bg-gray-100 text-gray-500',
+          };
+          const div = document.createElement('div');
+          div.id = `app-${app.id}`;
+          div.className = 'bg-white border border-gray-200 rounded-xl p-5 mb-3';
+          div.innerHTML = `
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div>
+                <a href="/moderator.html?id=${app.profiles?.id}" class="font-semibold text-gray-900 hover:text-sky-600">${escapeHtml(app.profiles?.username || '—')}</a>
+                ${app.profiles?.rating_count > 0 ? `<span class="ml-2 text-yellow-500 text-sm">⭐ ${Number(app.profiles.rating_avg).toFixed(1)} <span class="text-gray-400 text-xs">(${app.profiles.rating_count})</span></span>` : '<span class="ml-2 text-xs text-gray-400">No ratings yet</span>'}
+              </div>
+              <span class="text-xs px-2 py-0.5 rounded-full shrink-0 ${STATUS_BADGE[app.status] || ''}">${app.status}</span>
+            </div>
+            ${app.pitch ? `<p class="text-sm text-gray-600 leading-relaxed mb-4">${escapeHtml(app.pitch)}</p>` : '<p class="text-gray-400 text-sm italic mb-4">No pitch provided.</p>'}
+            <div class="flex gap-2">
+              <button data-appid="${app.id}" data-action="accepted"
+                class="action-btn text-xs px-3 py-1.5 rounded-lg border ${app.status === 'accepted' ? 'bg-green-600 text-white border-green-600' : 'border-green-300 text-green-700 hover:bg-green-50'} transition-colors">
+                Accept
+              </button>
+              <button data-appid="${app.id}" data-action="rejected"
+                class="action-btn text-xs px-3 py-1.5 rounded-lg border ${app.status === 'rejected' ? 'bg-gray-400 text-white border-gray-400' : 'border-gray-300 text-gray-500 hover:bg-gray-100'} transition-colors">
+                Reject
+              </button>
+            </div>
+          `;
+          listEl.appendChild(div);
+        });
+
+        listEl.addEventListener('click', async e => {
+          const btn = e.target.closest('.action-btn');
+          if (!btn) return;
+          const appId = btn.dataset.appid;
+          const action = btn.dataset.action;
+          btn.disabled = true;
+          try {
+            const { updateApplicationStatus } = await import('/src/js/applications.js');
+            await updateApplicationStatus(appId, action);
+            // Refresh just this card's buttons/badge
+            const card = document.getElementById(`app-${appId}`);
+            const STATUS_BADGE = { pending: 'bg-yellow-50 text-yellow-700', accepted: 'bg-green-50 text-green-700', rejected: 'bg-gray-100 text-gray-500' };
+            card.querySelector('span.rounded-full').className = `text-xs px-2 py-0.5 rounded-full shrink-0 ${STATUS_BADGE[action] || ''}`;
+            card.querySelector('span.rounded-full').textContent = action;
+            card.querySelectorAll('.action-btn').forEach(b => {
+              const isActive = b.dataset.action === action;
+              b.className = `action-btn text-xs px-3 py-1.5 rounded-lg border ${
+                isActive
+                  ? (action === 'accepted' ? 'bg-green-600 text-white border-green-600' : 'bg-gray-400 text-white border-gray-400')
+                  : (b.dataset.action === 'accepted' ? 'border-green-300 text-green-700 hover:bg-green-50' : 'border-gray-300 text-gray-500 hover:bg-gray-100')
+              } transition-colors`;
+              b.disabled = false;
+            });
+          } catch (ex) {
+            alert(ex.message);
+            btn.disabled = false;
+          }
+        });
+      }
+    } else if (user && user.id !== listing.hirer_id) {
+      // ── Applicant view: show apply form ─────────────────────────────────
       document.getElementById('apply-section').classList.remove('hidden');
       document.getElementById('apply-btn').addEventListener('click', async () => {
         const btn = document.getElementById('apply-btn');
