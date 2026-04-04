@@ -49,7 +49,10 @@ export async function updateNavAuth() {
   const el = document.getElementById('auth-links');
   if (!el) return;
   if (user) {
-    el.innerHTML = `<a href="/dashboard.html" class="text-sm text-sky-600 hover:underline">Dashboard</a>
+    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).maybeSingle();
+    const name = (profile?.username || user.email?.split('@')[0] || 'Account').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    el.innerHTML = `<span class="text-sm font-semibold text-gray-800">${name}</span>
+      <a href="/dashboard.html" class="text-sm text-sky-600 hover:underline transition-colors">Dashboard</a>
       <button id="sign-out-btn" class="text-sm text-red-500 hover:text-red-700">Sign Out</button>`;
     document.getElementById('sign-out-btn')?.addEventListener('click', signOut);
   } else {
