@@ -11,7 +11,7 @@ export async function getListings({ page = 0, pageSize = 12, platform, compensat
 
   let q = supabase
     .from('job_listings')
-    .select('id, title, platform, hours_per_week, compensation_type, community_type, deadline, created_at, profiles:hirer_id(username, rating_avg, rating_count)')
+    .select('id, title, platform, hours_per_week, compensation_type, community_size, deadline, created_at, profiles:hirer_id(username, rating_avg, rating_count)')
     .eq('status', 'open')
     .order(col, { ascending: asc })
     .range(page * pageSize, (page + 1) * pageSize - 1);
