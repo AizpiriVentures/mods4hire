@@ -7,78 +7,150 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/src/css/styles.css" />
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+<body class="bg-gray-50 min-h-screen flex items-center justify-center px-4 py-10">
   <div class="bg-white w-full max-w-md rounded-xl shadow-sm border border-gray-200 p-8">
     <a href="/" class="text-sky-600 font-bold text-xl block mb-6">Mods4Hire</a>
+
+    <!-- Tabs -->
     <div class="flex mb-6 bg-gray-100 rounded-lg p-1">
-      <button id="tab-login" class="flex-1 text-sm py-1.5 rounded-md bg-white shadow text-gray-900 font-medium">Log In</button>
-      <button id="tab-register" class="flex-1 text-sm py-1.5 rounded-md text-gray-500">Sign Up</button>
+      <button id="tab-login" class="flex-1 text-sm py-1.5 rounded-md bg-white shadow text-gray-900 font-medium transition">Log In</button>
+      <button id="tab-register" class="flex-1 text-sm py-1.5 rounded-md text-gray-500 transition">Sign Up</button>
     </div>
+
+    <!-- Google OAuth -->
+    <button id="google-btn" type="button" class="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2 text-sm text-gray-700 hover:bg-gray-50 transition mb-4">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Continue with Google
+    </button>
+
+    <div class="flex items-center gap-3 mb-4">
+      <div class="flex-1 h-px bg-gray-200"></div>
+      <span class="text-xs text-gray-400">or</span>
+      <div class="flex-1 h-px bg-gray-200"></div>
+    </div>
+
+    <!-- Login Form -->
     <form id="login-form" class="space-y-4">
-      <input id="login-email" type="email" placeholder="Email" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
-      <input id="login-password" type="password" placeholder="Password" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      <input id="login-email" type="email" placeholder="Email" required autocomplete="email"
+        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      <input id="login-password" type="password" placeholder="Password" required
+        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
       <p id="login-error" class="text-red-500 text-sm hidden"></p>
       <button type="submit" id="login-btn" class="w-full bg-sky-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-sky-700 transition">Log In</button>
     </form>
+
+    <!-- Register Form -->
     <form id="register-form" class="space-y-4 hidden">
-      <input id="reg-username" type="text" placeholder="Username" required minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
-      <input id="reg-email" type="email" placeholder="Email" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
-      <input id="reg-password" type="password" placeholder="Password (8+ chars)" required minlength="8" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm" />
-      <select id="reg-role" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
-        <option value="both">Hirer & Moderator</option>
+      <input id="reg-username" type="text" placeholder="Username" required minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+"
+        title="Letters, numbers, and underscores only"
+        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      <input id="reg-email" type="email" placeholder="Email" required
+        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      <input id="reg-password" type="password" placeholder="Password (8+ characters)" required minlength="8"
+        class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      <select id="reg-role" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400">
+        <option value="both">Hirer &amp; Moderator</option>
         <option value="hirer">I hire moderators</option>
         <option value="moderator">I am a moderator</option>
       </select>
       <p id="reg-error" class="text-red-500 text-sm hidden"></p>
       <button type="submit" id="reg-btn" class="w-full bg-sky-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-sky-700 transition">Create Account</button>
     </form>
+
+    <!-- Email confirmation success state (hidden by default) -->
+    <div id="confirm-msg" class="hidden text-center py-6">
+      <div class="text-4xl mb-3">📧</div>
+      <h3 class="font-bold text-gray-900 text-lg mb-2">Check your email</h3>
+      <p id="confirm-email-text" class="text-gray-500 text-sm leading-relaxed mb-4"></p>
+      <button onclick="document.getElementById('confirm-msg').classList.add('hidden');document.getElementById('tab-login').click();" class="text-sm text-sky-600 hover:underline">Back to Log In</button>
+    </div>
   </div>
+
+  <!-- Tab switching in plain script — runs regardless of module import status -->
   <script>
-  document.getElementById('menu-btn')?.addEventListener('click', () => {
-    document.getElementById('mobile-menu').classList.toggle('hidden');
-  });
-</script>
+    const tabLogin   = document.getElementById('tab-login');
+    const tabReg     = document.getElementById('tab-register');
+    const loginForm  = document.getElementById('login-form');
+    const regForm    = document.getElementById('register-form');
+    const googleBtn  = document.getElementById('google-btn');
+
+    function showTab(tab) {
+      const isLogin = tab === 'login';
+      loginForm.classList.toggle('hidden', !isLogin);
+      regForm.classList.toggle('hidden', isLogin);
+      tabLogin.className = isLogin
+        ? 'flex-1 text-sm py-1.5 rounded-md bg-white shadow text-gray-900 font-medium transition'
+        : 'flex-1 text-sm py-1.5 rounded-md text-gray-500 transition';
+      tabReg.className = isLogin
+        ? 'flex-1 text-sm py-1.5 rounded-md text-gray-500 transition'
+        : 'flex-1 text-sm py-1.5 rounded-md bg-white shadow text-gray-900 font-medium transition';
+    }
+    tabLogin.addEventListener('click', () => showTab('login'));
+    tabReg.addEventListener('click',   () => showTab('register'));
+    if (location.hash === '#register') showTab('register');
+  </script>
+
   <script type="module">
-    import { signIn, signUp } from '/src/js/auth.js';
+    import { signIn, signUp, signInWithGoogle } from '/src/js/auth.js';
     import { setLoading } from '/src/js/supabase.js';
 
-    const tabLogin = document.getElementById('tab-login');
-    const tabReg = document.getElementById('tab-register');
-    tabLogin.addEventListener('click', () => { document.getElementById('login-form').classList.remove('hidden'); document.getElementById('register-form').classList.add('hidden'); });
-    tabReg.addEventListener('click', () => { document.getElementById('register-form').classList.remove('hidden'); document.getElementById('login-form').classList.add('hidden'); });
-    if (location.hash === '#register') tabReg.click();
+    // Google OAuth
+    document.getElementById('google-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('google-btn');
+      btn.disabled = true;
+      btn.textContent = 'Redirecting…';
+      try { await signInWithGoogle(); }
+      catch (ex) { alert(ex.message); btn.disabled = false; btn.innerHTML = '…'; location.reload(); }
+    });
 
+    // Login
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('login-btn');
       const err = document.getElementById('login-error');
-      err.classList.add('hidden'); setLoading(btn, true);
-      try { await signIn(document.getElementById('login-email').value, document.getElementById('login-password').value); window.location.href = '/dashboard.html'; }
-      catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); }
-      finally { setLoading(btn, false); }
+      err.classList.add('hidden');
+      setLoading(btn, true);
+      try {
+        await signIn(
+          document.getElementById('login-email').value,
+          document.getElementById('login-password').value
+        );
+        window.location.href = '/dashboard.html';
+      } catch (ex) {
+        err.textContent = ex.message;
+        err.classList.remove('hidden');
+      } finally { setLoading(btn, false); }
     });
 
+    // Register
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('reg-btn');
       const err = document.getElementById('reg-error');
       const email = document.getElementById('reg-email').value;
-      err.classList.add('hidden'); setLoading(btn, true);
+      err.classList.add('hidden');
+      setLoading(btn, true);
       try {
-        const data = await signUp(email, document.getElementById('reg-password').value, document.getElementById('reg-username').value, document.getElementById('reg-role').value);
+        const data = await signUp(
+          email,
+          document.getElementById('reg-password').value,
+          document.getElementById('reg-username').value,
+          document.getElementById('reg-role').value
+        );
         if (data.session) {
           window.location.href = '/dashboard.html';
         } else {
-          document.getElementById('register-form').innerHTML = `
-            <div class="text-center py-6">
-              <div class="text-4xl mb-3">📧</div>
-              <h3 class="font-bold text-gray-900 text-lg mb-2">Check your email</h3>
-              <p class="text-gray-500 text-sm leading-relaxed">We sent a confirmation link to <strong class="text-gray-700">${email}</strong>.<br>Click it to activate your account, then log in.</p>
-            </div>`;
+          // Email confirmation required — show success message
+          document.getElementById('login-form').classList.add('hidden');
+          document.getElementById('register-form').classList.add('hidden');
+          document.getElementById('confirm-email-text').innerHTML =
+            `We sent a confirmation link to <strong>${email}</strong>.<br>Click it to activate your account, then log in here.`;
+          document.getElementById('confirm-msg').classList.remove('hidden');
         }
-      }
-      catch (ex) { err.textContent = ex.message; err.classList.remove('hidden'); }
-      finally { setLoading(btn, false); }
+      } catch (ex) {
+        err.textContent = ex.message;
+        err.classList.remove('hidden');
+      } finally { setLoading(btn, false); }
     });
   </script>
 </body>
