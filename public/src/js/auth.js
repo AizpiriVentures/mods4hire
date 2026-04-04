@@ -15,6 +15,12 @@ export async function requireAuth() {
 export async function signIn(email, password) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
+  // Ensure this user has an account on this specific site
+  const { data: profile } = await supabase.from('profiles').select('id').eq('id', data.user.id).maybeSingle();
+  if (!profile) {
+    await supabase.auth.signOut();
+    throw new Error('No account found here. Please sign up first.');
+  }
   return data;
 }
 
