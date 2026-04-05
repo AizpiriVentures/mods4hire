@@ -101,6 +101,80 @@
         </div>
       </div>
 
+      <!-- Gaming Background -->
+      <div class="border border-gray-200 rounded-xl p-5 space-y-4 bg-white">
+        <h2 class="text-sm font-semibold text-gray-700">Gaming Background <span class="text-gray-400 font-normal">(optional)</span></h2>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Gaming since (year)</label>
+            <input id="gaming_since_year" type="number" min="1970" max="2030" placeholder="e.g. 2005"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Hours/week gaming</label>
+            <input id="gaming_hours_week" type="number" min="0" max="168" placeholder="e.g. 15"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Gaming style</label>
+          <select id="gaming_style" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400">
+            <option value="">Select...</option>
+            <option value="casual">Casual gamer</option>
+            <option value="competitive">Competitive / hardcore</option>
+            <option value="content_creator">Content creator</option>
+            <option value="streamer">Streamer</option>
+            <option value="collector">Collector</option>
+            <option value="speedrunner">Speedrunner</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Favorite genres</label>
+          <div class="flex flex-wrap gap-3">
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="FPS" class="rounded" /> FPS</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="RPG" class="rounded" /> RPG</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="MMORPG" class="rounded" /> MMORPG</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="Strategy" class="rounded" /> Strategy</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="MOBA" class="rounded" /> MOBA</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="Battle Royale" class="rounded" /> Battle Royale</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="Sports" class="rounded" /> Sports</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="Simulation" class="rounded" /> Simulation</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="Indie" class="rounded" /> Indie</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="Horror" class="rounded" /> Horror</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="Adventure" class="rounded" /> Adventure</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="genre" value="Puzzle" class="rounded" /> Puzzle</label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Preferred platforms</label>
+          <div class="flex flex-wrap gap-3">
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="game_platform" value="PC" class="rounded" /> PC</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="game_platform" value="PlayStation" class="rounded" /> PlayStation</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="game_platform" value="Xbox" class="rounded" /> Xbox</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="game_platform" value="Nintendo Switch" class="rounded" /> Nintendo Switch</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="game_platform" value="Mobile" class="rounded" /> Mobile</label>
+            <label class="flex items-center gap-1.5 text-sm"><input type="checkbox" name="game_platform" value="VR" class="rounded" /> VR</label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Favorite games <span class="text-gray-400 font-normal">(comma-separated)</span></label>
+          <input id="favorite_games" type="text" maxlength="300" placeholder="e.g. Minecraft, CS:GO, Elden Ring"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Notable gaming achievements / history <span class="text-gray-400 font-normal">(optional)</span></label>
+          <textarea id="notable_games" rows="3" maxlength="500"
+            placeholder="e.g. Former tournament player, top 100 ranked in X, moderated Y community for 3 years…"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+        </div>
+      </div>
+
       <p id="form-error" class="text-red-500 text-sm hidden"></p>
       <button type="submit" id="save-btn"
         class="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-lg font-medium transition-colors">
@@ -122,17 +196,11 @@
     const user = await requireAuth();
 
     // ── Load current profile ────────────────────────────────────────────────
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('username, bio, role')
-      .eq('id', user.id)
-      .single();
-
-    const { data: modProfile } = await supabase
-      .from('moderator_profiles')
-      .select('platforms, hours_per_week, portfolio_url')
-      .eq('id', user.id)
-      .maybeSingle();
+    const [{ data: profile }, { data: modProfile }, { data: gamingProfile }] = await Promise.all([
+      supabase.from('profiles').select('username, bio, role').eq('id', user.id).single(),
+      supabase.from('moderator_profiles').select('platforms, hours_per_week, portfolio_url').eq('id', user.id).maybeSingle(),
+      supabase.from('gaming_profiles').select('*').eq('id', user.id).maybeSingle(),
+    ]);
 
     // Pre-fill form
     document.getElementById('username').value = profile?.username || '';
@@ -168,6 +236,25 @@
       document.getElementById('bio-count').textContent = `${bioEl.value.length} / 500`;
     });
 
+    // Pre-fill gaming profile
+    if (gamingProfile) {
+      if (gamingProfile.gaming_since_year) document.getElementById('gaming_since_year').value = gamingProfile.gaming_since_year;
+      if (gamingProfile.gaming_hours_week) document.getElementById('gaming_hours_week').value = gamingProfile.gaming_hours_week;
+      if (gamingProfile.gaming_style) document.getElementById('gaming_style').value = gamingProfile.gaming_style;
+      if (gamingProfile.favorite_games) document.getElementById('favorite_games').value = gamingProfile.favorite_games;
+      if (gamingProfile.notable_games) document.getElementById('notable_games').value = gamingProfile.notable_games;
+      if (gamingProfile.favorite_genres?.length) {
+        document.querySelectorAll('[name="genre"]').forEach(cb => {
+          cb.checked = gamingProfile.favorite_genres.includes(cb.value);
+        });
+      }
+      if (gamingProfile.preferred_platforms?.length) {
+        document.querySelectorAll('[name="game_platform"]').forEach(cb => {
+          cb.checked = gamingProfile.preferred_platforms.includes(cb.value);
+        });
+      }
+    }
+
     // ── Save ───────────────────────────────────────────────────────────────
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -200,6 +287,24 @@
           });
           if (mErr) throw mErr;
         }
+
+        // Upsert gaming profile
+        const favorite_genres = Array.from(document.querySelectorAll('[name="genre"]:checked')).map(cb => cb.value);
+        const preferred_platforms = Array.from(document.querySelectorAll('[name="game_platform"]:checked')).map(cb => cb.value);
+        const gamingSince = document.getElementById('gaming_since_year').value;
+        const gamingHours = document.getElementById('gaming_hours_week').value;
+
+        const { error: gErr } = await supabase.from('gaming_profiles').upsert({
+          id: user.id,
+          gaming_since_year:  gamingSince ? parseInt(gamingSince) : null,
+          gaming_hours_week:  gamingHours ? parseInt(gamingHours) : null,
+          gaming_style:       document.getElementById('gaming_style').value || null,
+          favorite_genres,
+          preferred_platforms,
+          favorite_games:     document.getElementById('favorite_games').value.trim() || null,
+          notable_games:      document.getElementById('notable_games').value.trim() || null,
+        });
+        if (gErr) throw gErr;
 
         showToast('Profile saved!');
       } catch (ex) {
