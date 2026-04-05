@@ -45,7 +45,7 @@ export async function signUp(email, password, username, role) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { username, role }, emailRedirectTo: window.location.origin + '/login.html' }
+    options: { data: { username, role }, emailRedirectTo: window.location.origin + '/auth/callback.html' }
   });
   if (error) throw error;
   return data;

@@ -23,7 +23,7 @@
       Continue with Google
     </button>
 
-    <div class="flex items-center gap-3 mb-4">
+    <div id="google-divider" class="flex items-center gap-3 mb-4">
       <div class="flex-1 h-px bg-gray-200"></div>
       <span class="text-xs text-gray-400">or</span>
       <div class="flex-1 h-px bg-gray-200"></div>
@@ -146,6 +146,8 @@
           // Email confirmation required — show success message
           document.getElementById('login-form').classList.add('hidden');
           document.getElementById('register-form').classList.add('hidden');
+          document.getElementById('google-btn').classList.add('hidden');
+          document.getElementById('google-divider').classList.add('hidden');
           document.getElementById('confirm-email-text').innerHTML =
             `We sent a confirmation link to <strong>${email}</strong>.<br>Click it to activate your account, then log in here.`;
           document.getElementById('confirm-msg').classList.remove('hidden');
